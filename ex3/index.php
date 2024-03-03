@@ -10,36 +10,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 $errors = FALSE;
-// if (empty($_POST['name']) || strlen($_POST['name']) > 128) {
-//   print('Заполните корректно имя.<br/>');
-//   $errors = TRUE;
-// }
+if (empty($_POST['name']) || strlen($_POST['name']) > 128) {
+  print('Заполните корректно имя.<br/>');
+  $errors = TRUE;
+}
 
-// if (empty($_POST['phone']) || !preg_match('/^\+?\d{10,11}$/', $_POST['phone'])) {
-//   print('Заполните корректно номер телефона.<br/>');
-//   $errors = TRUE;
-// }
+if (empty($_POST['phone']) || !preg_match('/^\+?\d{10,11}$/', $_POST['phone'])) {
+  print('Заполните корректно номер телефона.<br/>');
+  $errors = TRUE;
+}
 
-// if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-//   print('Заполните корректно адрес электронной почты.<br/>');
-//   $errors = TRUE;
-// }
-//
-// if (empty($_POST['sex']) || !in_array($_POST['sex'], ['Male', 'Female'])) {
-//   print('Заполните корректно пол.<br/>');
-//   $errors = TRUE;
-// }
-//
-// if (strlen($_POST['biography']) > 256) {
-//   print('Заполните корректно биографию.<br/>');
-//   $errors = TRUE;
-// }
+if (empty($_POST['email']) || strlen($_POST['email']) > 64 || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+  print('Заполните корректно адрес электронной почты.<br/>');
+  $errors = TRUE;
+}
 
-// // Проверка языка программирования
-// if (empty($_POST['language']) || !preg_match('/^value\d+$/', $_POST['language'])) {
-//   print('Выберите язык программирования.<br/>');
-//   $errors = TRUE;
-// }
+if (strlen($_POST['biography']) > 256) {
+  print('Заполните корректно биографию.<br/>');
+  $errors = TRUE;
+}
+
+if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+  print('Заполните корректно адрес электронной почты.<br/>');
+  $errors = TRUE;
+}
 
 if ($errors) {
   exit();
