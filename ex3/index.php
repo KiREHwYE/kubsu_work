@@ -15,7 +15,7 @@ if (empty($_POST['name']) || strlen($_POST['name']) > 128) {
   $errors = TRUE;
 }
 
-if (empty($_POST['phone']) || !preg_match('/^\+?\d{10,11}$/', $_POST['phone'])) {
+if (empty($_POST['phone']) || !preg_match('/^\+?\d{11}$/', $_POST['phone'])) {
   print('Заполните корректно номер телефона.<br/>');
   $errors = TRUE;
 }
