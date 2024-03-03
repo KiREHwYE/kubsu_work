@@ -15,7 +15,7 @@ if (empty($_POST['name']) || strlen($_POST['name']) > 128) {
   $errors = TRUE;
 }
 
-if (empty($_POST['phone']) || strlen($_POST['phone']) > 32 || !preg_match('^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', $_POST['phone'])) {
+if (empty($_POST['phone']) || strlen($_POST['phone']) > 32 || !preg_match('/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/', $_POST['phone'])) {
   print('Заполните корректно номер телефона.<br/>');
   $errors = TRUE;
 }
