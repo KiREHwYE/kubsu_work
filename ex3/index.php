@@ -54,10 +54,11 @@ $db = new PDO('mysql:host=localhost;dbname=u67397', $user, $pass, [
 ]);
 
 try {
-  $stmt = $db->prepare("INSERT INTO person (name, phone, year, sex, biography) VALUES (:name, :phone, :year, :sex, :biography)");
+  $stmt = $db->prepare("INSERT INTO person (name, email, phone, year, sex, biography) VALUES (:name, :email, :phone, :year, :sex, :biography)");
   $stmt->execute([
     ':name' => $_POST['name'],
     ':phone' => $_POST['phone'],
+    ':email' => $_POST['email'],
     ':year' => $_POST['year'],
     ':sex' => $_POST['sex'],
     ':biography' => $_POST['biography']
