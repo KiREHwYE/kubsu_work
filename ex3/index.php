@@ -63,13 +63,24 @@ try {
     ':sex' => $_POST['sex'],
     ':biography' => $_POST['biography']
   ]);
-  $personId = $db->lastInsertId();
 
-//   $stmt = $db->prepare("INSERT INTO personAbility (personId, languageId) VALUES (:personId, :languageId)");
-//   $stmt->execute([
-//     ':personId' => $personId,
-//     ':languageId' => $_POST['language']
-//   ]);
+  $personId = $db->lastInsertId();
+  
+  $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
+
+  // Обработка каждого выбранного языка
+  foreach ($_POST['language'] as $selectedOption) {
+    // Получение languageId для выбранного языка
+    $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+    $languageStmt->execute([':title' => $selectedOption]);
+    $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+
+    // Вставка в personLanguage
+    $stmt->execute([
+      ':personId' => $personId,
+      ':languageId' => $language['languageId']
+    ]);
+  }
 }
 catch(PDOException $e){
   print('Error : ' . $e->getMessage());
