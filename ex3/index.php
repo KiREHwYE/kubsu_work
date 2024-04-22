@@ -4,6 +4,7 @@ header('Content-Type: text/html; charset=UTF-8');
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if (!empty($_GET['save'])) {
     print('Спасибо, результаты сохранены.');
+    exit()
   }
   include('index.html');
   exit();
@@ -36,6 +37,7 @@ if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL
 }
 
 if ($errors) {
+    header('Location: ?error=1');
   exit();
 }
 
@@ -59,7 +61,7 @@ try {
   ]);
 
   $personId = $db->lastInsertId();
-  
+
   $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
   // Обработка каждого выбранного языка
