@@ -217,7 +217,7 @@ else {
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
       // Обработка каждого выбранного языка
-      foreach ($_POST['language'] as $selectedOption) {
+      foreach ($_POST['language[]'] as $selectedOption) {
         // Получение languageId для выбранного языка
         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
