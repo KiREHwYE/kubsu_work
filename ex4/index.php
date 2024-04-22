@@ -125,7 +125,7 @@ else {
     // Сохраняем ранее введенное в форму значение на месяц.
     setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
 
-    if (empty($_POST['email']) || !preg_match('/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/', $_POST['email'])) {
+    if (empty($_POST['email']) || !preg_match('/^[\w_\.]+@([\w-]+\.)+[\w-]{2,4}$/', $_POST['email'])) {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('email_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
@@ -140,6 +140,7 @@ else {
         }
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('year_value', $_POST['year'], time() + 30 * 24 * 60 * 60);
+/*
 
         if (empty($_POST['sex'])) {
             // Выдаем куку на день с флажком об ошибке в поле fio.
@@ -148,8 +149,9 @@ else {
           }
           // Сохраняем ранее введенное в форму значение на месяц.
           setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
+ */
 
-/* 
+/*
           if (empty($_POST['language'])) {
                       // Выдаем куку на день с флажком об ошибке в поле fio.
                       setcookie('language_error', '1', time() + 24 * 60 * 60);
