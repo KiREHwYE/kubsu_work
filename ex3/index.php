@@ -59,7 +59,7 @@ try {
   ]);
 
   $personId = $db->lastInsertId();
-
+  
   $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
   // Обработка каждого выбранного языка
