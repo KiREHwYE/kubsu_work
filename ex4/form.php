@@ -35,22 +35,17 @@ print('</div>');
   </div>
 
   <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
-  <?php foreach ($languages as $value => $name): ?>
-          <option value="<?php echo $value; ?>" <?php if (in_array($value, $values['language'])) {echo 'selected';} ?>>
-              <?php echo $name; ?>
-          </option>
-      <?php endforeach; ?>
-      <option value="value1" <?php if (in_array('value1', $values['language'])) {print 'selected';} ?>>Pascal</option>
-      <option value="value2" <?php if (in_array('value2', $values['language'])) {print 'selected';} ?>>C</option>
-      <option value="value3" <?php if (in_array('value3', $values['language'])) {print 'selected';} ?>>C++</option>
-      <option value="value4" <?php if (in_array('value4', $values['language'])) {print 'selected';} ?>>JavaScript</option>
-      <option value="value5" <?php if (in_array('value5', $values['language'])) {print 'selected';} ?>>PHP</option>
-      <option value="value6" <?php if (in_array('value6', $values['language'])) {print 'selected';} ?>>Python</option>
-      <option value="value7" <?php if (in_array('value7', $values['language'])) {print 'selected';} ?>>Java</option>
-      <option value="value8" <?php if (in_array('value8', $values['language'])) {print 'selected';} ?>>Haskell</option>
-      <option value="value9" <?php if (in_array('value9', $values['language'])) {print 'selected';} ?>>Clojure</option>
-      <option value="value10" <?php if (in_array('value10', $values['language'])) {print 'selected';} ?>>Prolog</option>
-      <option value="value11" <?php if (in_array('value11', $values['language'])) {print 'selected';} ?>>Scala</option>
+    <option value="value1" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Pascal</option>
+    <option value="value2" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>C</option>
+    <option value="value3" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>C++</option>
+    <option value="value4" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>JavaScript</option>
+    <option value="value5" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>PHP</option>
+    <option value="value6" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Python</option>
+    <option value="value7" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Java</option>
+    <option value="value8" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Haskel</option>
+    <option value="value9" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Clojure</option>
+    <option value="value10" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Prolog</option>
+    <option value="value11" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Scala</option>
   </select>
 
   <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
