@@ -58,16 +58,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 
   $values = array();
-  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
   $values['name'] = empty($_COOKIE['name_value']) ? '' : $_COOKIE['name_value'];
   $values['phone'] = empty($_COOKIE['phone_value']) ? '' : $_COOKIE['phone_value'];
   $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
   $values['year'] = empty($_COOKIE['year_value']) ? '' : $_COOKIE['year_value'];
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
+  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
 
 
-    $selected_languages = array();
 
   include('form.php');
 }
@@ -112,25 +111,12 @@ else {
         setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
     }
 
-// if (empty($_POST['language'])) {
-//         setcookie('language_error', '1', time() + 24 * 60 * 60);
-//         $errors = TRUE;
-//     } else {
-//         setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
-//     }
-
-
-        if (!empty($_POST['language'])) {
-            // Store the selected languages in a cookie for 30 days
-            setcookie('selected_languages', serialize($_POST['language']), time() + (86400 * 30), "/");
-        }
-        if (isset($_COOKIE['selected_languages']) && !empty($_COOKIE['selected_languages'])) {
-            // Unserialize the cookie to get the array of selected languages
-            $selected_languages = unserialize($_COOKIE['selected_languages']);
-        } else {
-            // Initialize an empty array if the cookie is not set
-            $selected_languages = array();
-        }
+if (empty($_POST['language'])) {
+        setcookie('language_error', '1', time() + 24 * 60 * 60);
+        $errors = TRUE;
+    } else {
+        setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
+    }
 
         if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
             setcookie('biography_error', '1', time() + 24 * 60 * 60);
@@ -175,7 +161,7 @@ else {
 
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
-      foreach ($selected_languages as $selectedOption) {
+      foreach ($_POST['language'] as $selectedOption) {
         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
