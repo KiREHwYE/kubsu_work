@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['email'] = !empty($_COOKIE['email_error']);
   $errors['year'] = !empty($_COOKIE['year_error']);
   $errors['sex'] = !empty($_COOKIE['sex_error']);
-  $errors['language'] = !empty($_COOKIE['language_error']);
+  $errors['language[]'] = !empty($_COOKIE['language_error']);
   $errors['biography'] = !empty($_COOKIE['biography_error']);
 
   // Выдаем сообщения об ошибках.
