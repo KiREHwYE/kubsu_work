@@ -73,14 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $messages[] = '<div class="error">Заполните пол.</div>';
    }
   if ($errors['language']) {
-     // Удаляем куки, указывая время устаревания в прошлом.
-     setcookie('language_error', '', 100000);
-     foreach ($_POST['language'] as $selectedOption) {
-         setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
-     }
-     // Выводим сообщение.
-     $messages[] = '<div class="error">Выберете любимые языки.</div>';
-   }
+      // Set the error cookie with an expiration time in the past to delete it.
+      setcookie('language_error', '', time() - 3600);
+      // Clear the 'language_value' cookie as well.
+      setcookie('language_value', '', time() - 3600);
+      // Display an error message.
+      $messages[] = '<div class="error">Выберете любимые языки.</div>';
+  } else {
+      // If there are no errors and the 'language' POST data is set, serialize and save the selected options in a cookie.
+      if (isset($_POST['language']) && is_array($_POST['language'])) {
+          setcookie('language_value', serialize($_POST['language']), time() + 30 * 24 * 60 * 60);
+      }
+  }
    if ($errors['biography']) {
         // Удаляем куки, указывая время устаревания в прошлом.
         setcookie('biography_error', '', 100000);
@@ -143,6 +147,8 @@ else {
         setcookie('year_value', $_POST['year'], time() + 30 * 24 * 60 * 60);
     }
 
+
+
     if (empty($_POST['sex'])) {
         setcookie('sex_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
@@ -150,64 +156,67 @@ else {
         setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
     }
 
-    // Check if the 'language' cookie is set and unserialize it to get the array of selected languages
 if (isset($_COOKIE['language_value'])) {
-    $selected_languages = unserialize($_COOKIE['language_value']);
-} else {
-    $selected_languages = array();
+    $values['language'] = unserialize($_COOKIE['language_value']);
 }
-
-// Array of language options
-$languages = array(
-    'value1' => 'Pascal',
-    'value2' => 'C',
-    'value3' => 'C++',
-    'value4' => 'JavaScript',
-    'value5' => 'PHP',
-    'value6' => 'Python',
-    'value7' => 'Java',
-    'value8' => 'Haskell',
-    'value9' => 'Clojure',
-    'value10' => 'Prolog',
-    'value11' => 'Scala'
-);
-
-// HTML select element for languages
-echo '<select style="margin-top: 20px" name="language[]" multiple ';
-if ($errors['language']) {
-    echo 'class="error"';
-}
-echo '>';
-
-// Loop through the language options and mark them as selected if they are in the selected_languages array
-foreach ($languages as $value => $name) {
-    echo '<option value="' . $value . '"';
-    if (in_array($value, $selected_languages)) {
-        echo ' selected';
-    }
-    echo '>' . $name . '</option>';
-}
-
-echo '</select>';
-
-// Form submission handling
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (empty($_POST['language'])) {
-        // Set a cookie for one day with an error flag
-        setcookie('language_error', '1', time() + 24 * 60 * 60);
-        $errors = true;
+    // Check if the 'language' cookie is set and unserialize it to get the array of selected languages
+    if (isset($_COOKIE['language_value'])) {
+        $selected_languages = unserialize($_COOKIE['language_value']);
     } else {
-        // Save the selected options in an array in the cookie
-        setcookie('language_value', serialize($_POST['language']), time() + 30 * 24 * 60 * 60);
+        $selected_languages = array();
     }
-}
 
-    if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
-        setcookie('biography_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
+    // Array of language options
+    $languages = array(
+        'value1' => 'Pascal',
+        'value2' => 'C',
+        'value3' => 'C++',
+        'value4' => 'JavaScript',
+        'value5' => 'PHP',
+        'value6' => 'Python',
+        'value7' => 'Java',
+        'value8' => 'Haskell',
+        'value9' => 'Clojure',
+        'value10' => 'Prolog',
+        'value11' => 'Scala'
+    );
+
+    // HTML select element for languages
+    echo '<select style="margin-top: 20px" name="language[]" multiple ';
+    if ($errors['language']) {
+        echo 'class="error"';
     }
+    echo '>';
+
+    // Loop through the language options and mark them as selected if they are in the selected_languages array
+    foreach ($languages as $value => $name) {
+        echo '<option value="' . $value . '"';
+        if (in_array($value, $selected_languages)) {
+            echo ' selected';
+        }
+        echo '>' . $name . '</option>';
+    }
+
+    echo '</select>';
+
+    // Form submission handling
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (empty($_POST['language'])) {
+            // Set a cookie for one day with an error flag
+            setcookie('language_error', '1', time() + 24 * 60 * 60);
+            $errors = true;
+        } else {
+            // Save the selected options in an array in the cookie
+            setcookie('language_value', serialize($_POST['language']), time() + 30 * 24 * 60 * 60);
+        }
+    }
+
+        if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
+            setcookie('biography_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
+        }
 
 
 // *************
@@ -221,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
   }
   else {
-        // Удаляем Cookies с признаками ошибок.
+    // Удаляем Cookies с признаками ошибок.
     setcookie('name_error', '', 100000);
         // TODO: тут необходимо удалить остальные Cookies.
     setcookie('phone_error', '', 100000);
