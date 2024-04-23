@@ -33,18 +33,19 @@ print('</div>');
       <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="M" <?php if ($values['sex'] == 'M') {print 'checked';} ?>>Male
       <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="F" <?php if ($values['sex'] == 'F') {print 'checked';} ?>>Female
   </div>
+
   <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
-    <option value="value1" <?php if (in_array('value1', $selected_languages)) echo 'selected'; ?>>Pascal</option>
-    <option value="value2" <?php if (in_array('value2', $selected_languages)) echo 'selected'; ?>>C</option>
-    <option value="value3" <?php if (in_array('value3', $selected_languages)) echo 'selected'; ?>>C++</option>
-    <option value="value4" <?php if (in_array('value4', $selected_languages)) echo 'selected'; ?>>JavaScript</option>
-    <option value="value5" <?php if (in_array('value5', $selected_languages)) echo 'selected'; ?>>PHP</option>
-    <option value="value6" <?php if (in_array('value6', $selected_languages)) echo 'selected'; ?>>Python</option>
-    <option value="value7" <?php if (in_array('value7', $selected_languages)) echo 'selected'; ?>>Java</option>
-    <option value="value8" <?php if (in_array('value8', $selected_languages)) echo 'selected'; ?>>Haskel</option>
-    <option value="value9" <?php if (in_array('value9', $selected_languages)) echo 'selected'; ?>>Clojure</option>
-    <option value="value10" <?php if (in_array('value10', $selected_languages)) echo 'selected'; ?>>Prolog</option>
-    <option value="value11" <?php if (in_array('value11', $selected_languages)) echo 'selected'; ?>>Scala</option>
+    <option value="value1">Pascal</option>
+    <option value="value2">C</option>
+    <option value="value3">C++</option>
+    <option value="value4">JavaScript</option>
+    <option value="value5">PHP</option>
+    <option value="value6">Python</option>
+    <option value="value7">Java</option>
+    <option value="value8">Haskel</option>
+    <option value="value9">Clojure</option>
+    <option value="value10">Prolog</option>
+    <option value="value11">Scala</option>
   </select>
 
   <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
@@ -55,3 +56,4 @@ print('</div>');
 </form>
 </body>
 </html>
+
