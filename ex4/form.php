@@ -30,8 +30,8 @@ print('</div>');
   <input required type="date" name="year" <?php if ($errors['year']) {print 'class="error"';} ?> value="<?php print $values['year']; ?>" placeholder="Date of birth">
 
   <div style="flex-direction: row;margin-top: 20px">
-    <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="<?php print $values['sex']; ?>">Male
-    <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="<?php print $values['sex']; ?>">Female
+      <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="M" <?php if ($values['sex'] == 'M') {print 'checked';} ?>>Male
+      <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="F" <?php if ($values['sex'] == 'F') {print 'checked';} ?>>Female
   </div>
 
   <select style="margin-top: 20px" name="language" multiple <?php if ($errors['language']) {print 'class="error"';} ?> value="<?php print $values['language']; ?>" >
