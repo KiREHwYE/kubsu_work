@@ -72,10 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       // Выводим сообщение.
       $messages[] = '<div class="error">Заполните пол.</div>';
    }
-  if ($errors['language']) {
+  if ($errors['language[]']) {
      // Удаляем куки, указывая время устаревания в прошлом.
      setcookie('language_error', '', 100000);
-     setcookie('language_value', '', 100000);
+     foreach ($_POST['language[]'] as $selectedOption) {
+         setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
+     }
      // Выводим сообщение.
      $messages[] = '<div class="error">Выберете любимые языки.</div>';
    }
@@ -150,7 +152,7 @@ else {
                     }
                     // Сохраняем ранее введенное в форму значение на месяц.
                     foreach ($_POST['language[]'] as $selectedOption) {
-                            setcookie(strval($selectedOption), $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
+                            setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
                     }
 
                     if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
