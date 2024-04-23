@@ -98,7 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
   $values['year'] = empty($_COOKIE['year_value']) ? '' : $_COOKIE['year_value'];
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
-  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+  if (!isset($values['language']) || !is_array($values['language'])) {
+      $values['language'] = array();
+  }
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
 
 
