@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 
   $errors = array();
-  
+
   $errors['name'] = !empty($_COOKIE['name_error']);
   $errors['phone'] = !empty($_COOKIE['phone_error']);
   $errors['email'] = !empty($_COOKIE['email_error']);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             setcookie('language_value', '', 100000);
             $messages[] = '<div class="error">Выберете языки.</div>';
          }
-  
+
    if ($errors['biography']) {
         setcookie('biography_error', '', 100000);
         setcookie('biography_value', '', 100000);
@@ -78,7 +78,7 @@ else {
         setcookie('name_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
-        setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
+        setcookie('name_value', $_POST['name'], time() + 30 * 24 * 60 * 60);
     }
 
     if (empty($_POST['phone']) || strlen($_POST['phone']) > 32 || !preg_match('/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/', $_POST['phone'])) {
