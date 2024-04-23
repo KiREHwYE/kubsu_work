@@ -223,15 +223,15 @@ else {
     exit();
   }
   else {
-    // Удаляем Cookies с признаками ошибок.
+        // Удаляем Cookies с признаками ошибок.
     setcookie('name_error', '', 100000);
         // TODO: тут необходимо удалить остальные Cookies.
     setcookie('phone_error', '', 100000);
-    setcookie('email_value', '', 100000);
-    setcookie('year_value', '', 100000);
-    setcookie('sex_value', '', 100000);
-    setcookie('language_value', '', 100000);
-    setcookie('biography_value', '', 100000);
+    setcookie('email_error', '', 100000);
+    setcookie('year_error', '', 100000);
+    setcookie('sex_error', '', 100000);
+    setcookie('language_error', '', 100000);
+    setcookie('biography_error', '', 100000);
   }
 
   // Сохранение в БД.
