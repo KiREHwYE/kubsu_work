@@ -1,6 +1,10 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
+define("user", "u67397");
+define("password", "2392099");
+define("dbname", "u67397");
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if (!empty($_GET['save'])) {
     print('Спасибо, результаты сохранены.');
@@ -42,9 +46,9 @@ if ($errors) {
 }
 
 // Сохранение в базу данных.
-$user = 'u67397'; // Заменить на ваш логин
-$pass = '2392099'; // Заменить на пароль
-$db = new PDO('mysql:host=localhost;dbname=u67397', $user, $pass, [
+$user = user; // Заменить на ваш логин
+$pass = password; // Заменить на пароль
+$db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
   PDO::ATTR_PERSISTENT => true,
   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
