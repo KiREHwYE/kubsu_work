@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
 
 
+    $selected_languages = array();
 
   include('form.php');
 }
