@@ -266,19 +266,46 @@ if (isset($_COOKIE['language_value'])) {
 
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
-      // Обработка каждого выбранного языка
-      foreach ($_POST['language'] as $selectedOption) {
-        // Получение languageId для выбранного языка
-        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-        $languageStmt->execute([':title' => $selectedOption]);
-        $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($_POST['language']) && is_array($_POST['language'])) {
+            foreach ($_POST['language'] as $selectedOption) {
+                // Prepare a query to get the languageId for the selected language
+                $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+                $languageStmt->execute([':title' => $selectedOption]);
+                $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+        
+                // Check if the fetch was successful and 'languageId' is available
+                if ($language && isset($language['languageId'])) {
+                    // Insert into personLanguage
+                    $stmt->execute([
+                        ':personId' => $personId,
+                        ':languageId' => $language['languageId']
+                    ]);
+                } else {
+                    // Handle the case where languageId is not found
+                    // You can log an error or take appropriate action
+                    // For example:
+                    echo "Error: Language ID not found for '$selectedOption'.";
+                }
+            }
+        } else {
+            // Handle the case where no languages are selected
+            // For example:
+            echo "Error: No languages selected.";
+        }
 
-        // Вставка в personLanguage
-        $stmt->execute([
-          ':personId' => $personId,
-          ':languageId' => $language['languageId']
-        ]);
-      }
+//       // Обработка каждого выбранного языка
+//       foreach ($_POST['language'] as $selectedOption) {
+//         // Получение languageId для выбранного языка
+//         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+//         $languageStmt->execute([':title' => $selectedOption]);
+//         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+// 
+//         // Вставка в personLanguage
+//         $stmt->execute([
+//           ':personId' => $personId,
+//           ':languageId' => $language['languageId']
+//         ]);
+//       }
     }
     catch(PDOException $e){
       print('Error : ' . $e->getMessage());
