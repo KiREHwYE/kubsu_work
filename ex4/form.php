@@ -50,8 +50,7 @@ print('</div>');
 
   <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
 
-  <p><input required type="checkbox" name="contract_agreement">I agree with the contract.</p>
-
+  <p><input required type="checkbox" name="contract_agreement" <?php if ($errors['contract_agreement']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract_agreement'] == 'Yes') {print 'checked';} ?>>I agree with the contract.</p>
   <input required type="submit" value="Submit">
 </form>
 </body>
