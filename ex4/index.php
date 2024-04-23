@@ -144,42 +144,40 @@ else {
           setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
 
 
+        if (empty($_POST['language'])) {
+            // Set a cookie for one day with an error flag.
+            setcookie('language_error', '1', time() + 24 * 60 * 60);
+            $errors = true;
+        } else {
+            // Save previously entered values in the form for a month.
+            foreach ($_POST['language'] as $selectedOption) {
+                // Prepend "lang_" to the option value to create a valid cookie name.
+                $cookieName = strval($selectedOption) . '_value';
+                // Save the value from the form input (adjust this based on your form field names).
+                $cookieValue = $_POST[strval($selectedOption)];
+                // Save the cookie for 30 days.
+                setcookie($cookieName, $cookieValue, time() + 30 * 24 * 60 * 60);
+            }
+        }
 
-          if (empty($_POST['language'])) {
-                      // Выдаем куку на день с флажком об ошибке в поле fio.
-                      setcookie('language_error', '1', time() + 24 * 60 * 60);
-                      $errors = TRUE;
-                    }
-                    // Сохраняем ранее введенное в форму значение на месяц.
-                    foreach ($_POST['language'] as $selectedOption) {
-                            setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
-                    }
+//           if (empty($_POST['language'])) {
+//                       // Выдаем куку на день с флажком об ошибке в поле fio.
+//                       setcookie('language_error', '1', time() + 24 * 60 * 60);
+//                       $errors = TRUE;
+//                     }
+//                     // Сохраняем ранее введенное в форму значение на месяц.
+//                     foreach ($_POST['language'] as $selectedOption) {
+//                             setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
+//                     }
 
-//                     if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
-//                                 // Выдаем куку на день с флажком об ошибке в поле fio.
-//                                 setcookie('biography_error', '1', time() + 24 * 60 * 60);
-//                                 $errors = TRUE;
-//                               }
-//                               // Сохраняем ранее введенное в форму значение на месяц.
-//                               setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
-                              if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
-                                  // Set a cookie for one day with a flag indicating an error in the biography field.
-                                  setcookie('biography_error', '1', time() + 24 * 60 * 60);
-                                  $errors = TRUE;
-                              } else {
-                                  // Save the previously entered value in the form for one month.
-                                  setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
+                    if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
+                                // Выдаем куку на день с флажком об ошибке в поле fio.
+                                setcookie('biography_error', '1', time() + 24 * 60 * 60);
+                                $errors = TRUE;
                               }
+                              // Сохраняем ранее введенное в форму значение на месяц.
+                              setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
 
-                              // Use the 'biography_value' cookie to restore the biography text
-                              $biography_value = isset($_COOKIE['biography_value']) ? $_COOKIE['biography_value'] : '';
-
-                              // Corrected <textarea> element
-                              echo '<textarea required style="margin-top: 20px" name="biography"';
-                              if ($errors['biography']) {
-                                  echo ' class="error"';
-                              }
-                              echo ' placeholder="Your biography">' . htmlspecialchars($biography_value) . '</textarea>';
 
 // *************
 // TODO: тут необходимо проверить правильность заполнения всех остальных полей.
