@@ -1,6 +1,10 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
+define("user", "u67397");
+define("password", "2392099");
+define("dbname", "u67397");
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $messages = array();
 
@@ -139,9 +143,9 @@ if (empty($_POST['language'])) {
     setcookie('biography_error', '', 100000);
   }
 
-    $user = 'u67397';
-    $pass = '2392099';
-    $db = new PDO('mysql:host=localhost;dbname=u67397', $user, $pass, [
+    $user = user;
+    $pass = password;
+    $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
       PDO::ATTR_PERSISTENT => true,
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
