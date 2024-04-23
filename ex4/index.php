@@ -118,7 +118,7 @@ else {
     // Проверяем ошибки.
     $errors = FALSE;
 
-    if (empty($_POST['name']) || !preg_match('/^([А-Яа-я\s]+|[A-Za-z\s]+){2, 128}$/', $_POST['name'])) {
+    if (empty($_POST['name']) || !preg_match('/^([А-Яа-я\s]+|[A-Za-z\s]+)$/', $_POST['name'])) {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('name_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
