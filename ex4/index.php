@@ -1,33 +1,17 @@
 <?php
-/**
- * Реализовать проверку заполнения обязательных полей формы в предыдущей
- * с использованием Cookies, а также заполнение формы по умолчанию ранее
- * введенными значениями.
- */
-
-// Отправляем браузеру правильную кодировку,
-// файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
-// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
-// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  // Массив для временного хранения сообщений пользователю.
   $messages = array();
 
-  // В суперглобальном массиве $_COOKIE PHP хранит все имена и значения куки текущего запроса.
-  // Выдаем сообщение об успешном сохранении.
   if (!empty($_COOKIE['save'])) {
-    // Удаляем куку, указывая время устаревания в прошлом.
     setcookie('save', '', 100000);
-    // Если есть параметр save, то выводим сообщение пользователю.
     $messages[] = 'Спасибо, результаты сохранены.';
   }
 
-  // Складываем признак ошибок в массив.
   $errors = array();
+
   $errors['name'] = !empty($_COOKIE['name_error']);
-  // TODO: аналогично все поля.
   $errors['phone'] = !empty($_COOKIE['phone_error']);
   $errors['email'] = !empty($_COOKIE['email_error']);
   $errors['year'] = !empty($_COOKIE['year_error']);
@@ -35,91 +19,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['language'] = !empty($_COOKIE['language_error']);
   $errors['biography'] = !empty($_COOKIE['biography_error']);
 
-  // Выдаем сообщения об ошибках.
   if ($errors['name']) {
-    // Удаляем куки, указывая время устаревания в прошлом.
     setcookie('name_error', '', 100000);
     setcookie('name_value', '', 100000);
-    // Выводим сообщение.
     $messages[] = '<div class="error">Заполните имя.</div>';
   }
-    // TODO: тут выдать сообщения об ошибках в других полях.
   if ($errors['phone']) {
-      // Удаляем куки, указывая время устаревания в прошлом.
       setcookie('phone_error', '', 100000);
       setcookie('phone_value', '', 100000);
-      // Выводим сообщение.
       $messages[] = '<div class="error">Заполните поле номера телефона.</div>';
   }
   if ($errors['email']) {
-    // Удаляем куки, указывая время устаревания в прошлом.
     setcookie('email_error', '', 100000);
     setcookie('email_value', '', 100000);
-    // Выводим сообщение.
     $messages[] = '<div class="error">Заполните поле email.</div>';
   }
   if ($errors['year']) {
-      // Удаляем куки, указывая время устаревания в прошлом.
       setcookie('year_error', '', 100000);
       setcookie('year_value', '', 100000);
-      // Выводим сообщение.
       $messages[] = '<div class="error">Укажите дату рождения.</div>';
   }
    if ($errors['sex']) {
-      // Удаляем куки, указывая время устаревания в прошлом.
-      setcookie('sex_error', '', 100000);
-      setcookie('sex_value', '', 100000);
-      // Выводим сообщение.
-      $messages[] = '<div class="error">Заполните пол.</div>';
-   }
-  if ($errors['language']) {
-      // Set the error cookie with an expiration time in the past to delete it.
-      setcookie('language_error', '', time() - 3600);
-      // Clear the 'language_value' cookie as well.
-      setcookie('language_value', '', time() - 3600);
-      // Display an error message.
-      $messages[] = '<div class="error">Выберете любимые языки.</div>';
-  } else {
-      // If there are no errors and the 'language' POST data is set, serialize and save the selected options in a cookie.
-      if (isset($_POST['language']) && is_array($_POST['language'])) {
-          setcookie('language_value', serialize($_POST['language']), time() + 30 * 24 * 60 * 60);
+         setcookie('sex_error', '', 100000);
+         setcookie('sex_value', '', 100000);
+         $messages[] = '<div class="error">Заполните пол.</div>';
       }
-  }
+      if ($errors['language']) {
+            setcookie('language_error', '', 100000);
+            setcookie('language_value', '', 100000);
+            $messages[] = '<div class="error">Выберете языки.</div>';
+         }
+
    if ($errors['biography']) {
-        // Удаляем куки, указывая время устаревания в прошлом.
         setcookie('biography_error', '', 100000);
         setcookie('biography_value', '', 100000);
-        // Выводим сообщение.
         $messages[] = '<div class="error">Заполните поле биографии.</div>';
       }
 
 
-  // Складываем предыдущие значения полей в массив, если есть.
   $values = array();
+  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
   $values['name'] = empty($_COOKIE['name_value']) ? '' : $_COOKIE['name_value'];
-      // TODO: аналогично все поля.
   $values['phone'] = empty($_COOKIE['phone_value']) ? '' : $_COOKIE['phone_value'];
   $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
   $values['year'] = empty($_COOKIE['year_value']) ? '' : $_COOKIE['year_value'];
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
-  if (!isset($values['language']) || !is_array($values['language'])) {
-      $values['language'] = array();
-  }
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
 
 
-  // Включаем содержимое файла form.php.
-  // В нем будут доступны переменные $messages, $errors и $values для вывода
-  // сообщений, полей с ранее заполненными данными и признаками ошибок.
+
   include('form.php');
 }
-// Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
+
 else {
-    // Проверяем ошибки.
     $errors = FALSE;
 
     if (empty($_POST['name']) || !preg_match('/^([А-Яа-я\s]+|[A-Za-z\s]+)$/', $_POST['name'])) {
-        // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('name_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
@@ -156,60 +111,25 @@ else {
         setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
     }
 
-if (isset($_COOKIE['language_value'])) {
-    $values['language'] = unserialize($_COOKIE['language_value']);
-}
-    // Check if the 'language' cookie is set and unserialize it to get the array of selected languages
-    if (isset($_COOKIE['language_value'])) {
-        $selected_languages = unserialize($_COOKIE['language_value']);
-    } else {
-        $selected_languages = array();
-    }
+// if (empty($_POST['language'])) {
+//         setcookie('language_error', '1', time() + 24 * 60 * 60);
+//         $errors = TRUE;
+//     } else {
+//         setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
+//     }
 
-    // Array of language options
-    $languages = array(
-        'value1' => 'Pascal',
-        'value2' => 'C',
-        'value3' => 'C++',
-        'value4' => 'JavaScript',
-        'value5' => 'PHP',
-        'value6' => 'Python',
-        'value7' => 'Java',
-        'value8' => 'Haskell',
-        'value9' => 'Clojure',
-        'value10' => 'Prolog',
-        'value11' => 'Scala'
-    );
 
-    // HTML select element for languages
-    echo '<select style="margin-top: 20px" name="language[]" multiple ';
-    if ($errors['language']) {
-        echo 'class="error"';
-    }
-    echo '>';
-
-    // Loop through the language options and mark them as selected if they are in the selected_languages array
-    foreach ($languages as $value => $name) {
-        echo '<option value="' . $value . '"';
-        if (in_array($value, $selected_languages)) {
-            echo ' selected';
+        if (!empty($_POST['language'])) {
+            // Store the selected languages in a cookie for 30 days
+            setcookie('selected_languages', serialize($_POST['language']), time() + (86400 * 30), "/");
         }
-        echo '>' . $name . '</option>';
-    }
-
-    echo '</select>';
-
-    // Form submission handling
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (empty($_POST['language'])) {
-            // Set a cookie for one day with an error flag
-            setcookie('language_error', '1', time() + 24 * 60 * 60);
-            $errors = true;
+        if (isset($_COOKIE['selected_languages']) && !empty($_COOKIE['selected_languages'])) {
+            // Unserialize the cookie to get the array of selected languages
+            $selected_languages = unserialize($_COOKIE['selected_languages']);
         } else {
-            // Save the selected options in an array in the cookie
-            setcookie('language_value', serialize($_POST['language']), time() + 30 * 24 * 60 * 60);
+            // Initialize an empty array if the cookie is not set
+            $selected_languages = array();
         }
-    }
 
         if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
             setcookie('biography_error', '1', time() + 24 * 60 * 60);
@@ -218,21 +138,12 @@ if (isset($_COOKIE['language_value'])) {
             setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
         }
 
-
-// *************
-// TODO: тут необходимо проверить правильность заполнения всех остальных полей.
-// Сохранить в Cookie признаки ошибок и значения полей.
-// *************
-
   if ($errors) {
-    // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
     header('Location: index.php');
     exit();
   }
   else {
-    // Удаляем Cookies с признаками ошибок.
     setcookie('name_error', '', 100000);
-        // TODO: тут необходимо удалить остальные Cookies.
     setcookie('phone_error', '', 100000);
     setcookie('email_error', '', 100000);
     setcookie('year_error', '', 100000);
@@ -241,11 +152,8 @@ if (isset($_COOKIE['language_value'])) {
     setcookie('biography_error', '', 100000);
   }
 
-  // Сохранение в БД.
-  // ...
-    // Сохранение в базу данных.
-    $user = 'u67397'; // Заменить на ваш логин
-    $pass = '2392099'; // Заменить на пароль
+    $user = 'u67397';
+    $pass = '2392099';
     $db = new PDO('mysql:host=localhost;dbname=u67397', $user, $pass, [
       PDO::ATTR_PERSISTENT => true,
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -266,55 +174,23 @@ if (isset($_COOKIE['language_value'])) {
 
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
-        if (isset($_POST['language']) && is_array($_POST['language'])) {
-            foreach ($_POST['language'] as $selectedOption) {
-                // Prepare a query to get the languageId for the selected language
-                $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-                $languageStmt->execute([':title' => $selectedOption]);
-                $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-        
-                // Check if the fetch was successful and 'languageId' is available
-                if ($language && isset($language['languageId'])) {
-                    // Insert into personLanguage
-                    $stmt->execute([
-                        ':personId' => $personId,
-                        ':languageId' => $language['languageId']
-                    ]);
-                } else {
-                    // Handle the case where languageId is not found
-                    // You can log an error or take appropriate action
-                    // For example:
-                    echo "Error: Language ID not found for '$selectedOption'.";
-                }
-            }
-        } else {
-            // Handle the case where no languages are selected
-            // For example:
-            echo "Error: No languages selected.";
-        }
+      foreach ($selected_languages as $selectedOption) {
+        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt->execute([':title' => $selectedOption]);
+        $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
-//       // Обработка каждого выбранного языка
-//       foreach ($_POST['language'] as $selectedOption) {
-//         // Получение languageId для выбранного языка
-//         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-//         $languageStmt->execute([':title' => $selectedOption]);
-//         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-// 
-//         // Вставка в personLanguage
-//         $stmt->execute([
-//           ':personId' => $personId,
-//           ':languageId' => $language['languageId']
-//         ]);
-//       }
+        $stmt->execute([
+          ':personId' => $personId,
+          ':languageId' => $language['languageId']
+        ]);
+      }
     }
     catch(PDOException $e){
       print('Error : ' . $e->getMessage());
       exit();
     }
 
-  // Сохраняем куку с признаком успешного сохранения.
   setcookie('save', '1');
 
-  // Делаем перенаправление.
   header('Location: index.php');
 }
