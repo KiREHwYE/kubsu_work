@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['sex'] = !empty($_COOKIE['sex_error']);
   $errors['language'] = !empty($_COOKIE['language_error']);
   $errors['biography'] = !empty($_COOKIE['biography_error']);
+  $errors['contract_agreement'] = !empty($_COOKIE['contract_agreement_error']);
 
   if ($errors['name']) {
     setcookie('name_error', '', 100000);
@@ -59,6 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         setcookie('biography_value', '', 100000);
         $messages[] = '<div class="error">Заполните поле биографии.</div>';
       }
+      if ($errors['contract_agreement']) {
+              setcookie('contract_agreement_error', '', 100000);
+              setcookie('contract_agreement_value', '', 100000);
+              $messages[] = '<div class="error">Поставьте галочку.</div>';
+            }
 
 
   $values = array();
@@ -69,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
   $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
+  $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : $_COOKIE['contract_agreement_value'];
 
 
 
@@ -128,6 +135,12 @@ if (empty($_POST['language'])) {
         } else {
             setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
         }
+        if (empty($_POST['contract_agreement'])) {
+                    setcookie('contract_agreement_error', '1', time() + 24 * 60 * 60);
+                    $errors = TRUE;
+                } else {
+                    setcookie('contract_agreement_value', $_POST['contract_agreement'], time() + 30 * 24 * 60 * 60);
+                }
 
   if ($errors) {
     header('Location: index.php');
@@ -141,6 +154,7 @@ if (empty($_POST['language'])) {
     setcookie('sex_error', '', 100000);
     setcookie('language_error', '', 100000);
     setcookie('biography_error', '', 100000);
+    setcookie('contract_agreement_error', '', 100000);
   }
 
     $user = user;
