@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['email'] = !empty($_COOKIE['email_error']);
   $errors['year'] = !empty($_COOKIE['year_error']);
   $errors['sex'] = !empty($_COOKIE['sex_error']);
-  $errors['language[]'] = !empty($_COOKIE['language_error']);
+  $errors['language'] = !empty($_COOKIE['language_error']);
   $errors['biography'] = !empty($_COOKIE['biography_error']);
 
   // Выдаем сообщения об ошибках.
@@ -72,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       // Выводим сообщение.
       $messages[] = '<div class="error">Заполните пол.</div>';
    }
-  if ($errors['language[]']) {
+  if ($errors['language']) {
      // Удаляем куки, указывая время устаревания в прошлом.
      setcookie('language_error', '', 100000);
-     foreach ($_POST['language[]'] as $selectedOption) {
+     foreach ($_POST['language'] as $selectedOption) {
          setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
      }
      // Выводим сообщение.
@@ -145,13 +145,13 @@ else {
 
 
 
-          if (empty($_POST['language[]'])) {
+          if (empty($_POST['language'])) {
                       // Выдаем куку на день с флажком об ошибке в поле fio.
                       setcookie('language_error', '1', time() + 24 * 60 * 60);
                       $errors = TRUE;
                     }
                     // Сохраняем ранее введенное в форму значение на месяц.
-                    foreach ($_POST['language[]'] as $selectedOption) {
+                    foreach ($_POST['language'] as $selectedOption) {
                             setcookie(strval($selectedOption) + '_value', $_POST[strval($selectedOption)], time() + 30 * 24 * 60 * 60);
                     }
 
@@ -211,7 +211,7 @@ else {
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
       // Обработка каждого выбранного языка
-      foreach ($_POST['language[]'] as $selectedOption) {
+      foreach ($_POST['language'] as $selectedOption) {
         // Получение languageId для выбранного языка
         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
