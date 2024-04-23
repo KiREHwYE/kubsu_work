@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 
   $errors = array();
-
+  
   $errors['name'] = !empty($_COOKIE['name_error']);
   $errors['phone'] = !empty($_COOKIE['phone_error']);
   $errors['email'] = !empty($_COOKIE['email_error']);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             setcookie('language_value', '', 100000);
             $messages[] = '<div class="error">Выберете языки.</div>';
          }
-
+  
    if ($errors['biography']) {
         setcookie('biography_error', '', 100000);
         setcookie('biography_value', '', 100000);
