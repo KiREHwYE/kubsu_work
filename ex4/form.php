@@ -34,7 +34,7 @@ print('</div>');
     <input required type="radio" name="sex" value="F">Female
   </div>
 
-  <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?> value="<?php print $values['language']; ?>" >
+  <select style="margin-top: 20px" name="language" multiple <?php if ($errors['language']) {print 'class="error"';} ?> value="<?php print $values['language']; ?>" >
     <option value="value1">Pascal</option>
     <option value="value2">C</option>
     <option value="value3">C++</option>
