@@ -20,7 +20,7 @@ if ($_COOKIE[session_name()] && session_start()) {
   if (!empty($_SESSION['login'])) {
     // Если есть логин в сессии, то пользователь уже авторизован.
     // TODO: Сделать выход (окончание сессии вызовом session_destroy()
-    session_destroy()
+    session_destroy();
     //при нажатии на кнопку Выход).
     // Делаем перенаправление на форму.
     header('Location: ./');
