@@ -113,7 +113,7 @@ else {
         print('Error : ' . $e->getMessage());
         exit();
       }
-    }
+    
 
 
   // Делаем перенаправление.
