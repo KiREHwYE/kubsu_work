@@ -70,7 +70,7 @@ else {
      $personId = $authData['personId'];
 
      $_SESSION['uid'] = $personId;
-    echo strval($personId)
+    echo strval($personId);
 
    } catch(PDOException $e){
      print('Error : ' . $e->getMessage());
