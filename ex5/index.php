@@ -163,12 +163,6 @@ else {
       setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
   }
 
-  // if (empty($_POST['language'])) {
-  //     setcookie('language_error', '1', time() + 24 * 60 * 60);
-  //     $errors = TRUE;
-  // } else {
-  //     setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
-  // }
   if (empty($_POST['language'])) {
     setcookie('language_error', '1', time() + 24 * 60 * 60);
     $errors = TRUE;
