@@ -223,13 +223,20 @@ else {
 
     $login = $_SESSION['login'];
 
-    // Получаем personId из таблицы personAuthentificationData
-    $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
-    $stmt->execute([':login' => $login]);
-    $authData = $stmt->fetch(PDO::FETCH_ASSOC);
-    $personId = $authData['personId'];
-
+    $user = user;
+    $pass = password;
+    $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
+      PDO::ATTR_PERSISTENT => true,
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+    
     try {
+      // Получаем personId из таблицы personAuthentificationData
+      $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
+      $stmt->execute([':login' => $login]);
+      $authData = $stmt->fetch(PDO::FETCH_ASSOC);
+      $personId = $authData['personId'];
+      
       // Теперь обновляем данные в таблице person.
       $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
       $stmt->execute([
