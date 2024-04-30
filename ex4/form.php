@@ -34,7 +34,7 @@ print('</div>');
       <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="F" <?php if ($values['sex'] == 'F') {print 'checked';} ?>>Female
   </div>
 
-  <select style="margin-top: 20px" name="language" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
+<!--   <select style="margin-top: 20px" name="language" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
     <option value="value1">Pascal</option>
     <option value="value2">C</option>
     <option value="value3">C++</option>
@@ -46,6 +46,20 @@ print('</div>');
     <option value="value9">Clojure</option>
     <option value="value10">Prolog</option>
     <option value="value11">Scala</option>
+  </select>
+ -->
+<select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
+    <option value="Pascal">Pascal</option>
+    <option value="C">C</option>
+    <option value="C++">C++</option>
+    <option value="JavaScript">JavaScript</option>
+    <option value="PHP">PHP</option>
+    <option value="Python">Python</option>
+    <option value="Java">Java</option>
+    <option value="Haskel">Haskel</option>
+    <option value="Clojure">Clojure</option>
+    <option value="Prolog">Prolog</option>
+    <option value="Scala">Scala</option>
   </select>
 
   <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
