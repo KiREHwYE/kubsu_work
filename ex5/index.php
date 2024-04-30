@@ -333,10 +333,10 @@ else {
       $stmt = $db->prepare("INSERT INTO personAuthentificationData (personId, login, pass) VALUES (:personId, :login, :pass)");
 
       $stmt->execute([
-              ':personId' => $_POST['personId'],
-              ':login' => $_POST['login'],
-              ':pass' => $_POST['md5Pass'],
-            ]);
+        ':personId' => $personId,
+        ':login' => $login,
+        ':pass' => $md5Pass
+      ]);
     }
     catch(PDOException $e){
       print('Error : ' . $e->getMessage());
