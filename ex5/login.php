@@ -13,12 +13,15 @@ define("dbname", "u67397");
 
 // Отправляем браузеру правильную кодировку,
 // файл login.php должен быть в кодировке UTF-8 без BOM.
+// Отправляем браузеру правильную кодировку,
+// файл login.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
 // В суперглобальном массиве $_SESSION хранятся переменные сессии.
 // Будем сохранять туда логин после успешной авторизации.
 $session_started = false;
-if ($_COOKIE[session_name()] && session_start()) {
+if (isset($_COOKIE[session_name()])) {
+  session_start();
   $session_started = true;
   if (!empty($_SESSION['login'])) {
     // Если есть логин в сессии, то пользователь уже авторизован.
