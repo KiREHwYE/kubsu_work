@@ -7,6 +7,10 @@
 
 header('Content-Type: text/html; charset=UTF-8');
 
+define("user", "u67397");
+define("password", "2392099");
+define("dbname", "u67397");
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Массив для временного хранения сообщений пользователю.
   $messages = array();
