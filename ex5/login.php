@@ -69,7 +69,7 @@ else {
      $authData = $stmt->fetch(PDO::FETCH_ASSOC);
      $personId = $authData['personId'];
 
-     $_SESSION['uid'] = $personId
+     $_SESSION['uid'] = $personId;
 
    } catch(PDOException $e){
      print('Error : ' . $e->getMessage());
