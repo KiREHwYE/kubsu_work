@@ -229,13 +229,6 @@ else {
     $authData = $stmt->fetch(PDO::FETCH_ASSOC);
     $personId = $authData['personId'];
 
-    $user = user;
-    $pass = password;
-    $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
-      PDO::ATTR_PERSISTENT => true,
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-
     try {
       // Теперь обновляем данные в таблице person.
       $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
@@ -277,10 +270,11 @@ else {
             ':languageId' => $language['languageId']
           ]);
         }
-      } catch(PDOException $e){
-          print('Error : ' . $e->getMessage());
-          exit();
       }
+    } catch(PDOException $e){
+      print('Error : ' . $e->getMessage());
+      exit();
+    }
   }
 
 
