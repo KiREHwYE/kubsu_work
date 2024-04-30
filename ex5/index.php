@@ -7,10 +7,6 @@
 
 header('Content-Type: text/html; charset=UTF-8');
 
-define("user", "u67397");
-define("password", "2392099");
-define("dbname", "u67397");
-
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Массив для временного хранения сообщений пользователю.
   $messages = array();
@@ -104,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['email'] = empty($_COOKIE['email_value']) ? '' : strip_tags($_COOKIE['email_value']);
   $values['year'] = empty($_COOKIE['year_value']) ? '' : strip_tags($_COOKIE['year_value']);
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : strip_tags($_COOKIE['sex_value']);
-  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+  $values['language'] = empty($_COOKIE['language_value']) ? '' : strip_tags($_COOKIE['language_value']);
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
   $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : strip_tags($_COOKIE['contract_agreement_value']);
 
@@ -166,10 +162,9 @@ else {
   if (empty($_POST['language'])) {
       setcookie('language_error', '1', time() + 24 * 60 * 60);
       $errors = TRUE;
-  } 
-  // else {
-  //     setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
-  // }
+  } else {
+      setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
+  }
 
   if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
       setcookie('biography_error', '1', time() + 24 * 60 * 60);
