@@ -123,11 +123,13 @@ else {
     }
 
 if (empty($_POST['language'])) {
-        setcookie('language_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
-    }
+    setcookie('language_error', '1', time() + 24 * 60 * 60);
+    $errors = TRUE;
+  } else {
+      // Преобразование массива в строку для сохранения в cookie
+      $language_value = implode(',', $_POST['language']);
+      setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
+  }
 
         if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
             setcookie('biography_error', '1', time() + 24 * 60 * 60);
