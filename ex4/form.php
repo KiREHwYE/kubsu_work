@@ -34,20 +34,6 @@ print('</div>');
       <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="F" <?php if ($values['sex'] == 'F') {print 'checked';} ?>>Female
   </div>
 
-<!--   <select style="margin-top: 20px" name="language" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
-    <option value="value1">Pascal</option>
-    <option value="value2">C</option>
-    <option value="value3">C++</option>
-    <option value="value4">JavaScript</option>
-    <option value="value5">PHP</option>
-    <option value="value6">Python</option>
-    <option value="value7">Java</option>
-    <option value="value8">Haskel</option>
-    <option value="value9">Clojure</option>
-    <option value="value10">Prolog</option>
-    <option value="value11">Scala</option>
-  </select>
- -->
 <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
     <option value="Pascal">Pascal</option>
     <option value="C">C</option>
