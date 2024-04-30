@@ -163,14 +163,21 @@ else {
       setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
   }
 
-  if (empty($_POST['language'])) {
+  // if (empty($_POST['language'])) {
+  //     setcookie('language_error', '1', time() + 24 * 60 * 60);
+  //     $errors = TRUE;
+  //   } else {
+  //       // Преобразование массива в строку для сохранения в cookie
+  //       $language_value = implode(',', $_POST['language']);
+  //       setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
+  //   }
+
+ if (empty($_POST['language'])) {
       setcookie('language_error', '1', time() + 24 * 60 * 60);
       $errors = TRUE;
-    } else {
-        // Преобразование массива в строку для сохранения в cookie
-        $language_value = implode(',', $_POST['language']);
-        setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
-    }
+  } else {
+      setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
+  }
 
   if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
       setcookie('biography_error', '1', time() + 24 * 60 * 60);
@@ -312,38 +319,38 @@ else {
 
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
-//       foreach ($_POST['language'] as $selectedOption) {
-//         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-//         $languageStmt->execute([':title' => $selectedOption]);
-//         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-// 
-//         $stmt->execute([
-//           ':personId' => $personId,
-//           ':languageId' => $language['languageId']
-//         ]);
-//       }
-      
-      if (isset($_POST['language']) && is_array($_POST['language'])) {
-          foreach ($_POST['language'] as $selectedOption) {
-              // Подготовка запроса к базе данных
-              $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-              $languageStmt->execute([':title' => $selectedOption]);
-              $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-      
-              // Проверка, что результат запроса не false и languageId не null
-              if ($language && $language['languageId'] !== null) {
-                  $stmt->execute([
-                      ':personId' => $personId,
-                      ':languageId' => $language['languageId']
-                  ]);
-              } else {
-                  // Обработка ситуации, когда язык не найден в базе данных
-                  // Например, можно записать ошибку в лог или установить значение по умолчанию
-              }
-          }
-      } else {
-          // Обработка ошибки, если $_POST['language'] не установлен или не является массивом
+      foreach ($_POST['language'] as $selectedOption) {
+        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt->execute([':title' => $selectedOption]);
+        $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+
+        $stmt->execute([
+          ':personId' => $personId,
+          ':languageId' => $language['languageId']
+        ]);
       }
+      
+      // if (isset($_POST['language']) && is_array($_POST['language'])) {
+      //     foreach ($_POST['language'] as $selectedOption) {
+      //         // Подготовка запроса к базе данных
+      //         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+      //         $languageStmt->execute([':title' => $selectedOption]);
+      //         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+      
+      //         // Проверка, что результат запроса не false и languageId не null
+      //         if ($language && $language['languageId'] !== null) {
+      //             $stmt->execute([
+      //                 ':personId' => $personId,
+      //                 ':languageId' => $language['languageId']
+      //             ]);
+      //         } else {
+      //             // Обработка ситуации, когда язык не найден в базе данных
+      //             // Например, можно записать ошибку в лог или установить значение по умолчанию
+      //         }
+      //     }
+      // } else {
+      //     // Обработка ошибки, если $_POST['language'] не установлен или не является массивом
+      // }
 
       $stmt = $db->prepare("INSERT INTO personAuthentificationData (personId, login, pass) VALUES (:personId, :login, :pass)");
 
