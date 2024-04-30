@@ -234,34 +234,34 @@ else {
     ]);
 
     // Обновляем данные в таблице personLanguage.
-    foreach ($_POST['language'] as $selectedOption) {
-      $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-      $languageStmt->execute([':title' => $selectedOption]);
-      $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+    // foreach ($_POST['language'] as $selectedOption) {
+    //   $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+    //   $languageStmt->execute([':title' => $selectedOption]);
+    //   $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
-      // Проверяем, существует ли уже запись для данного personId и languageId.
-      $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
-      $checkStmt->execute([
-        ':personId' => $personId,
-        ':languageId' => $language['languageId']
-      ]);
+    //   // Проверяем, существует ли уже запись для данного personId и languageId.
+    //   $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
+    //   $checkStmt->execute([
+    //     ':personId' => $personId,
+    //     ':languageId' => $language['languageId']
+    //   ]);
 
-      if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
-        // Если запись существует, обновляем ее.
-        $updateStmt = $db->prepare("UPDATE personLanguage SET personId = :personId, languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
-        $updateStmt->execute([
-          ':personId' => $personId,
-          ':languageId' => $language['languageId']
-        ]);
-      } else {
-        // Если записи не существует, вставляем новую.
-        $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
-        $insertStmt->execute([
-          ':personId' => $personId,
-          ':languageId' => $language['languageId']
-        ]);
-      }
-    }
+    //   if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
+    //     // Если запись существует, обновляем ее.
+    //     $updateStmt = $db->prepare("UPDATE personLanguage SET personId = :personId, languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
+    //     $updateStmt->execute([
+    //       ':personId' => $personId,
+    //       ':languageId' => $language['languageId']
+    //     ]);
+    //   } else {
+    //     // Если записи не существует, вставляем новую.
+    //     $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
+    //     $insertStmt->execute([
+    //       ':personId' => $personId,
+    //       ':languageId' => $language['languageId']
+    //     ]);
+    //   }
+    // }
 
 
   }
