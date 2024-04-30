@@ -233,7 +233,7 @@ else {
       ':personId' => $personId
     ]);
 
-    Обновляем данные в таблице personLanguage.
+    // Обновляем данные в таблице personLanguage.
     foreach ($_POST['language'] as $selectedOption) {
       $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
       $languageStmt->execute([':title' => $selectedOption]);
