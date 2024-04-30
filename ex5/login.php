@@ -93,8 +93,11 @@ else {
     
       try {
         // Проверяем, есть ли пользователь с таким логином и паролем
-        $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND password = :password");
-        $stmt->execute([':login' => $login, ':password' => $password]);
+        $login = $_POST['login'];
+        $password = $_POST['pass'];
+
+        $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND pass = :pass");
+        $stmt->execute([':login' => $login, ':pass' => $password]);
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
     
         if ($authData) {
