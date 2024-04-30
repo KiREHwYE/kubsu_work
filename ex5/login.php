@@ -1,5 +1,8 @@
 <?php
 
+define("user", "u67397");
+define("password", "2392099");
+define("dbname", "u67397");
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
  * При отправке формы проверяет логин/пароль и создает сессию,
@@ -51,8 +54,28 @@ else {
   }
   // Если все ок, то авторизуем пользователя.
   $_SESSION['login'] = $_POST['login'];
-  // Записываем ID пользователя.
-  $_SESSION['uid'] = rand();
+
+   $user = user;
+   $pass = password;
+   $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
+     PDO::ATTR_PERSISTENT => true,
+     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+   ]);
+
+   try {
+     // Получаем personId из таблицы personAuthentificationData
+     $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
+     $stmt->execute([':login' => $login]);
+     $authData = $stmt->fetch(PDO::FETCH_ASSOC);
+     $personId = $authData['personId'];
+
+     $_SESSION['uid'] = $personId
+
+   } catch(PDOException $e){
+     print('Error : ' . $e->getMessage());
+     exit();
+   }
+
 
   // Делаем перенаправление.
   header('Location: ./');
