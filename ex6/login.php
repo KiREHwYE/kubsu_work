@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   <input type="submit" value="Войти" />
 </form>
 
-<input required type="logout" value="logout">
+<button type="submit" name="logout">Выйти</button>
 
 </body>
 
