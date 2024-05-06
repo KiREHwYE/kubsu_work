@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
-    if (empty($errors) && session_start() && !empty($_SESSION['login'])) {
+    if (session_start() && !empty($_SESSION['login'])) {
 
     $user = user;
     $pass = password;
