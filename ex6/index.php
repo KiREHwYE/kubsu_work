@@ -48,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Выдаем сообщения об ошибках.
     if ($errors['name']) {
-        setcookie('name_error', '', 100000);
-        setcookie('name_value', '', 100000);
-        $messages[] = '<div class="error">Заполните имя.</div>';
+      setcookie('name_error', '', 100000);
+      setcookie('name_value', '', 100000);
+      $messages[] = '<div class="error">Заполните имя.</div>';
     }
 
     if ($errors['phone']) {
@@ -60,9 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     if ($errors['email']) {
-        setcookie('email_error', '', 100000);
-        setcookie('email_value', '', 100000);
-        $messages[] = '<div class="error">Заполните поле email.</div>';
+      setcookie('email_error', '', 100000);
+      setcookie('email_value', '', 100000);
+      $messages[] = '<div class="error">Заполните поле email.</div>';
     }
 
     if ($errors['year']) {
@@ -229,14 +229,14 @@ else {
       PDO::ATTR_PERSISTENT => true,
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
-
+    
     try {
       // Получаем personId из таблицы personAuthentificationData
       $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
       $stmt->execute([':login' => $login]);
       $authData = $stmt->fetch(PDO::FETCH_ASSOC);
       $personId = $authData['personId'];
-
+      
       // Теперь обновляем данные в таблице person.
       $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
       $stmt->execute([
@@ -248,20 +248,20 @@ else {
         ':biography' => $_POST['biography'],
         ':personId' => $personId
       ]);
-
+  
       // Обновляем данные в таблице personLanguage.
       foreach ($_POST['language'] as $selectedOption) {
         $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-
+  
         // Проверяем, существует ли уже запись для данного personId и languageId.
         $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
         $checkStmt->execute([
           ':personId' => $personId,
           ':languageId' => $language['languageId']
         ]);
-
+  
         if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
           // Если запись существует, обновляем ее.
           $updateStmt = $db->prepare("UPDATE personLanguage SET personId = :personId, languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
