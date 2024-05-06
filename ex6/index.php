@@ -104,7 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['email'] = empty($_COOKIE['email_value']) ? '' : strip_tags($_COOKIE['email_value']);
   $values['year'] = empty($_COOKIE['year_value']) ? '' : strip_tags($_COOKIE['year_value']);
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : strip_tags($_COOKIE['sex_value']);
-  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+ $savedLanguage = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+$values['language'] = explode(',', $savedLanguage);
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
   $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : strip_tags($_COOKIE['contract_agreement_value']);
 
@@ -190,14 +191,13 @@ else {
       setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
   }
 
-  if (empty($_POST['language'])) {
-      setcookie('language_error', '1', time() + 24 * 60 * 60);
-      $errors = TRUE;
-    } else {
-        // Преобразование массива в строку для сохранения в cookie
-        $language_value = implode(',', $_POST['language']);
-        setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
-    }
+if (empty($_POST['language'])) {
+    setcookie('language_error', '1', time() + 24 * 60 * 60);
+    $errors = TRUE;
+} else {
+    $languageString = implode(',', $_POST['language']);
+    setcookie('language_value', $languageString, time() + 30 * 24 * 60 * 60);
+}
 
  // if (empty($_POST['language'])) {
  //      setcookie('language_error', '1', time() + 24 * 60 * 60);
