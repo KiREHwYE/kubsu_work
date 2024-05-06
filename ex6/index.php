@@ -111,6 +111,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
     if (session_start() && !empty($_SESSION['login'])) {
+
+    $user = user;
+    $pass = password;
+    $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
+      PDO::ATTR_PERSISTENT => true,
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+
+
     try {
       $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
       $stmt->bindParam(':personId', $_SESSION['uid'], PDO::PARAM_INT);
