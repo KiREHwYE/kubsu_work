@@ -110,14 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
-    if (empty($errors) && !empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
+    if (session_start() && !empty($_SESSION['login'])) {
     try {
       $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
       $stmt->bindParam(':personId', $_SESSION['uid'], PDO::PARAM_INT);
       $stmt->execute();
-  
+
       $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-  
+
       if ($userData) {
         // Заполняем массив $values данными пользователя
         $values['name'] = strip_tags($userData['name']);
@@ -126,8 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $values['year'] = strip_tags($userData['year']);
         $values['sex'] = strip_tags($userData['sex']);
         $values['biography'] = strip_tags($userData['biography']);
-        
-        printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
       } else {
         echo 'Данные пользователя не найдены.';
       }
