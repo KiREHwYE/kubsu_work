@@ -110,11 +110,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
-  if (empty($errors) && !empty($_COOKIE[session_name()]) &&
+    if (empty($errors) && !empty($_COOKIE[session_name()]) &&
       session_start() && !empty($_SESSION['login'])) {
     // TODO: загрузить данные пользователя из БД
     // и заполнить переменную $values,
     // предварительно санитизовав.
+
+    try {
+
+      $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
+      $stmt->bindParam(':personId', $_SESSION['uid']);
+      $stmt->execute([
+        ':name' => $values['name'],
+        ':phone' => $values['phone'],
+        ':email' => $values['email'],
+        ':year' => $values['year'],
+        ':sex' => $values['sex'],
+        ':biography' => $values['biography']
+        ]);
+
+    } catch(PDOException $e) {
+        print('Error : ' . $e->getMessage());
+        exit();
+    }
+
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
   }
 
