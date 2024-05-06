@@ -142,6 +142,11 @@ function isSelected($optionValue, $savedLanguages) {
         $values['year'] = strip_tags($userData['year']);
         $values['sex'] = strip_tags($userData['sex']);
         $values['biography'] = strip_tags($userData['biography']);
+
+        $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+        $selectedLanguagesStmt->execute([':personId' => $personId]);
+        $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
       } else {
         echo 'Данные пользователя не найдены.';
       }
