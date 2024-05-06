@@ -40,17 +40,17 @@ print('</div>');
   </div>
 
   <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
-    <option value="value1">Pascal</option>
-    <option value="value2">C</option>
-    <option value="value3">C++</option>
-    <option value="value4">JavaScript</option>
-    <option value="value5">PHP</option>
-    <option value="value6">Python</option>
-    <option value="value7">Java</option>
-    <option value="value8">Haskel</option>
-    <option value="value9">Clojure</option>
-    <option value="value10">Prolog</option>
-    <option value="value11">Scala</option>
+    <option value="Pascal">Pascal</option>
+    <option value="C">C</option>
+    <option value="C++">C++</option>
+    <option value="JavaScript">JavaScript</option>
+    <option value="PHP">PHP</option>
+    <option value="Python">Python</option>
+    <option value="Java">Java</option>
+    <option value="Haskel">Haskel</option>
+    <option value="Clojure">Clojure</option>
+    <option value="Prolog">Prolog</option>
+    <option value="Scala">Scala</option>
   </select>
 
   <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
