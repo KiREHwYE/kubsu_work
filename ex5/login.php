@@ -3,6 +3,7 @@
 define("user", "u67397");
 define("password", "2392099");
 define("dbname", "u67397");
+
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
  * При отправке формы проверяет логин/пароль и создает сессию,
@@ -13,21 +14,23 @@ define("dbname", "u67397");
 
 // Отправляем браузеру правильную кодировку,
 // файл login.php должен быть в кодировке UTF-8 без BOM.
-// Отправляем браузеру правильную кодировку,
-// файл login.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
 // В суперглобальном массиве $_SESSION хранятся переменные сессии.
 // Будем сохранять туда логин после успешной авторизации.
 $session_started = false;
-if (isset($_COOKIE[session_name()])) {
-  session_start();
+if (isset($_COOKIE[session_name()]) && session_start()) {
   $session_started = true;
   if (!empty($_SESSION['login'])) {
     // Если есть логин в сессии, то пользователь уже авторизован.
     // TODO: Сделать выход (окончание сессии вызовом session_destroy()
-    session_destroy();
     //при нажатии на кнопку Выход).
+    if (isset($_POST['logout'])) {
+        session_destroy();
+        header('Location: ./');
+        exit();
+    }
+
     // Делаем перенаправление на форму.
     header('Location: ./');
     exit();
@@ -39,11 +42,22 @@ if (isset($_COOKIE[session_name()])) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<h1>
+  Login
+</h1>
+
 <form action="" method="post">
   <input name="login" />
   <input name="pass" />
   <input type="submit" value="Войти" />
 </form>
+
+</body>
+
+
+
 
 <?php
 }
@@ -81,9 +95,9 @@ else {
         } else {
           // Пользователь не найден, выдаем ошибку
           echo "Неверный логин или пароль.";
+          echo $md5Pass;
           exit();
         }
-        
       } catch(PDOException $e){
         print('Error : ' . $e->getMessage());
         exit();
@@ -94,3 +108,4 @@ else {
   // Делаем перенаправление.
   header('Location: ./');
 }
+
