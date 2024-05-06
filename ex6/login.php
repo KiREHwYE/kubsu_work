@@ -72,8 +72,8 @@ else {
         $password = $_POST['pass'];
         $md5Pass = md5($password);
 
-        $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND pass = :md5Pass");
-        $stmt->execute([':login' => $login, ':pass' => $password]);
+        $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND pass = :pass");
+        $stmt->execute([':login' => $login, ':pass' => $md5Pass]);
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($authData) {
@@ -87,6 +87,7 @@ else {
         } else {
           // Пользователь не найден, выдаем ошибку
           echo "Неверный логин или пароль.";
+          echo $md5Pass;
           exit();
         }
       } catch(PDOException $e){
