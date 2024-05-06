@@ -32,8 +32,11 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
       exit();
     }
     // Делаем перенаправление на форму.
-    header('Location: ./');
-    exit();
+    
+    if (isset($_POST['login'])) {
+          header('Location: ./');
+          exit();
+        }
   }
 }
 
