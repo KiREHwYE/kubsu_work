@@ -49,61 +49,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 // Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
 else {
-  // TODO: Проверть есть ли такой логин и пароль в базе данных.
-  // Выдать сообщение об ошибках.
-
-  //   if (!$session_started) {
-//     session_start();
-//   }
-//   // Если все ок, то авторизуем пользователя.
-//   $_SESSION['login'] = $_POST['login'];
-// 
-//   $user = user;
-//   $pass = password;
-//   $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
-//     PDO::ATTR_PERSISTENT => true,
-//     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-//   ]);
-// 
-//   try {
-//     // Получаем personId из таблицы personAuthentificationData
-//     $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
-//     $stmt->execute([':login' => $login]);
-//     $authData = $stmt->fetch(PDO::FETCH_ASSOC);
-//     $personId = $authData['personId'];
-// 
-//     $_SESSION['uid'] = $personId;
-// 
-// 
-//   } catch(PDOException $e){
-//     print('Error : ' . $e->getMessage());
-//     exit();
-//   }
-
-     if (!$session_started) {
+      if (!$session_started) {
         session_start();
       }
-    
+
       $user = user;
       $pass = password;
       $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
         PDO::ATTR_PERSISTENT => true,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
       ]);
-    
+
       try {
         // Проверяем, есть ли пользователь с таким логином и паролем
         $login = $_POST['login'];
         $password = $_POST['pass'];
+        $md5Pass = md5($password);
 
         $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND pass = :pass");
-        $stmt->execute([':login' => $login, ':pass' => $password]);
+        $stmt->execute([':login' => $login, ':pass' => $md5Pass]);
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         if ($authData) {
           // Пользователь существует, сохраняем данные в сессию
           $_SESSION['login'] = $login;
           $_SESSION['uid'] = $authData['personId'];
+
           // Делаем перенаправление на главную страницу
           header('Location: ./');
           exit();
@@ -112,11 +83,12 @@ else {
           echo "Неверный логин или пароль.";
           exit();
         }
+        
       } catch(PDOException $e){
         print('Error : ' . $e->getMessage());
         exit();
       }
-    
+
 
 
   // Делаем перенаправление.
