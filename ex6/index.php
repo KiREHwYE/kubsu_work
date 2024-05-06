@@ -115,6 +115,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // TODO: загрузить данные пользователя из БД
     // и заполнить переменную $values,
     // предварительно санитизовав.
+
+    try {
+
+      $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
+      $stmt->bindParam(':personId', $_SESSION['uid']);
+      $stmt->execute([
+        ':name' => $values['name'],
+        ':phone' => $values['phone'],
+        ':email' => $values['email'],
+        ':year' => $values['year'],
+        ':sex' => $values['sex'],
+        ':biography' => $values['biography']
+        ]);
+
+    } catch(PDOException $e) {
+        print('Error : ' . $e->getMessage());
+        exit();
+    }
+
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
   }
 
