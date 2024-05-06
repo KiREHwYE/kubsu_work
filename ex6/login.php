@@ -72,7 +72,8 @@ else {
           $_SESSION['login'] = $login;
           $_SESSION['uid'] = $authData['personId'];
 
-          $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :$authData['personId']");
+          $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
+          $stmt->bindParam(':personId', $authData['personId']);
           $stmt->execute([
             ':name' => $name,
             ':phone' => $phone,
