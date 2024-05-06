@@ -15,7 +15,6 @@ define("dbname", "u67397");
 // Отправляем браузеру правильную кодировку,
 // файл login.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
-session_start();
 
 // В суперглобальном массиве $_SESSION хранятся переменные сессии.
 // Будем сохранять туда логин после успешной авторизации.
@@ -32,7 +31,7 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
       exit();
     }
     // Делаем перенаправление на форму.
-    
+
     if (isset($_POST['login'])) {
           header('Location: ./');
           exit();
@@ -54,10 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <form action="" method="post">
   <input name="login" />
   <input name="pass" />
-  <input type="submit" value="Войти" />
+  <input name="login" type="submit" value="Войти" />
 </form>
 
-<button type="submit" name="logout">Выйти</button>
+<button type="submit" name="logout" value="Выйти">Выйти</button>
 
 </body>
 
