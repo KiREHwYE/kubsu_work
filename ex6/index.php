@@ -109,6 +109,10 @@ $values['language'] = explode(',', $savedLanguage);
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
   $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : strip_tags($_COOKIE['contract_agreement_value']);
 
+function isSelected($optionValue, $savedLanguages) {
+    return in_array($optionValue, $savedLanguages) ? 'selected' : '';
+}
+  
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
     if (session_start() && !empty($_SESSION['login'])) {
