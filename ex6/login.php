@@ -24,8 +24,12 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
   if (!empty($_SESSION['login'])) {
     // Если есть логин в сессии, то пользователь уже авторизован.
     // TODO: Сделать выход (окончание сессии вызовом session_destroy()
-    session_destroy();
     //при нажатии на кнопку Выход).
+    if (isset($_POST['logout'])) {
+      session_destroy();
+      header('Location: ./');
+      exit();
+    }
     // Делаем перенаправление на форму.
     header('Location: ./');
     exit();
@@ -49,7 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   <input type="submit" value="Войти" />
 </form>
 
+<input required type="logout" value="logout">
+
 </body>
+
+
+
 
 <?php
 }
