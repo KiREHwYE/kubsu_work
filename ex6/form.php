@@ -78,6 +78,10 @@ print('</div>');
 // и задавая начальные значения элементов ранее сохраненными.
 ?>
 
+<h1>
+ Form
+</h1>
+
 <form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
   <input required type="text" name="name" <?php if ($errors['name']) {print 'class="error"';} ?> value="<?php print $values['name']; ?>" placeholder="Full name">
   <input required type="tel" name="phone" <?php if ($errors['phone']) {print 'class="error"';} ?> value="<?php print $values['phone']; ?>" placeholder="Phone number">
