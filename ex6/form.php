@@ -39,19 +39,19 @@ print('</div>');
       <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="F" <?php if ($values['sex'] == 'F') {print 'checked';} ?>>Female
   </div>
 
-  <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
-    <option value="Pascal">Pascal</option>
-    <option value="C">C</option>
-    <option value="C++">C++</option>
-    <option value="JavaScript">JavaScript</option>
-    <option value="PHP">PHP</option>
-    <option value="Python">Python</option>
-    <option value="Java">Java</option>
-    <option value="Haskel">Haskel</option>
-    <option value="Clojure">Clojure</option>
-    <option value="Prolog">Prolog</option>
-    <option value="Scala">Scala</option>
-  </select>
+<select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
+    <option value="Pascal" <?php echo isSelected('Pascal', $savedLanguages); ?>>Pascal</option>
+    <option value="C" <?php echo isSelected('C', $savedLanguages); ?>>C</option>
+    <option value="C++" <?php echo isSelected('C++', $savedLanguages); ?>>C++</option>
+    <option value="JavaScript" <?php echo isSelected('JavaScript', $savedLanguages); ?>>JavaScript</option>
+    <option value="PHP" <?php echo isSelected('PHP', $savedLanguages); ?>>PHP</option>
+    <option value="Python" <?php echo isSelected('Python', $savedLanguages); ?>>Python</option>
+    <option value="Java" <?php echo isSelected('Java', $savedLanguages); ?>>Java</option>
+    <option value="Haskel" <?php echo isSelected('Haskel', $savedLanguages); ?>>Haskel</option>
+    <option value="Clojure" <?php echo isSelected('Clojure', $savedLanguages); ?>>Clojure</option>
+    <option value="Prolog" <?php echo isSelected('Prolog', $savedLanguages); ?>>Prolog</option>
+    <option value="Scala" <?php echo isSelected('Scala', $savedLanguages); ?>>Scala</option>
+</select>
 
   <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
 
