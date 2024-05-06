@@ -37,11 +37,19 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
-<form style="display: flex; flex-direction: column; justify-content: center; align-items: center" action="" method="post">
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<h1>
+  Login
+</h1>
+
+<form action="" method="post">
   <input name="login" />
   <input name="pass" />
   <input type="submit" value="Войти" />
 </form>
+
+</body>
 
 <?php
 }
