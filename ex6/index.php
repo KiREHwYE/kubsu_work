@@ -143,9 +143,10 @@ function isSelected($optionValue, $savedLanguages) {
         $values['sex'] = strip_tags($userData['sex']);
         $values['biography'] = strip_tags($userData['biography']);
 
+        $personId = $_SESSION['uid'];
+        
         $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
         $selectedLanguagesStmt->execute([':personId' => $personId]);
-        $selectedLanguagesStmt->bindParam(':personId', $_SESSION['uid'], PDO::PARAM_INT);
         $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
       } else {
