@@ -117,22 +117,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // предварительно санитизовав.
 
     try {
-
-      $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
-      $stmt->bindParam(':personId', $_SESSION['uid']);
-      $stmt->execute([
-        ':name' => $values['name'],
-        ':phone' => $values['phone'],
-        ':email' => $values['email'],
-        ':year' => $values['year'],
-        ':sex' => $values['sex'],
-        ':biography' => $values['biography']
-        ]);
-
-    } catch(PDOException $e) {
-        print('Error : ' . $e->getMessage());
-        exit();
-    }
+        $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
+        $stmt->bindParam(':personId', $_SESSION['uid'], PDO::PARAM_INT);
+        $stmt->execute();
+    
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($userData) {
+          // Заполняем массив $values данными пользователя, предварительно санитизовав их
+          $values['name'] = strip_tags($userData['name']);
+          $values['phone'] = strip_tags($userData['phone']);
+          $values['email'] = strip_tags($userData['email']);
+          $values['year'] = strip_tags($userData['year']);
+          $values['sex'] = strip_tags($userData['sex']);
+          $values['biography'] = strip_tags($userData['biography']);
+        }
+    
+      } catch(PDOException $e) {
+          print('Error : ' . $e->getMessage());
+          exit();
+      }
 
     printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
   }
