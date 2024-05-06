@@ -70,26 +70,16 @@ else {
         // Проверяем, есть ли пользователь с таким логином и паролем
         $login = $_POST['login'];
         $password = $_POST['pass'];
+        $md5Pass = md5($password);
 
         $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND pass = :pass");
-        $stmt->execute([':login' => $login, ':pass' => $password]);
+        $stmt->execute([':login' => $login, ':pass' => $md5Pass]);
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($authData) {
           // Пользователь существует, сохраняем данные в сессию
           $_SESSION['login'] = $login;
           $_SESSION['uid'] = $authData['personId'];
-
-          $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
-          $stmt->bindParam(':personId', $authData['personId']);
-          $stmt->execute([
-            ':name' => $name,
-            ':phone' => $phone,
-            ':email' => $email,
-            ':year' => $year,
-            ':sex' => $sex,
-            ':biography' => $biography,
-            ]);
 
           // Делаем перенаправление на главную страницу
           header('Location: ./');
@@ -99,6 +89,7 @@ else {
           echo "Неверный логин или пароль.";
           exit();
         }
+
       } catch(PDOException $e){
         print('Error : ' . $e->getMessage());
         exit();
