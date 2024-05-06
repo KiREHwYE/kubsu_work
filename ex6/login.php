@@ -27,6 +27,7 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
     //при нажатии на кнопку Выход).
     if (isset($_POST['logout'])) {
         session_destroy();
+        echo "Вы вышли из сессии.";
         header('Location: ./');
         exit();
     }
