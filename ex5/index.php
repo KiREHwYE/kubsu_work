@@ -104,37 +104,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['email'] = empty($_COOKIE['email_value']) ? '' : strip_tags($_COOKIE['email_value']);
   $values['year'] = empty($_COOKIE['year_value']) ? '' : strip_tags($_COOKIE['year_value']);
   $values['sex'] = empty($_COOKIE['sex_value']) ? '' : strip_tags($_COOKIE['sex_value']);
-  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+ $savedLanguage = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+$values['language'] = explode(',', $savedLanguage);
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
   $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : strip_tags($_COOKIE['contract_agreement_value']);
 
+$savedLanguages = $values['language'];
+  
+function isSelected($optionValue, $savedLanguages) {
+        return in_array($optionValue, $savedLanguages) ? 'selected' : '';
+    }
+  
   // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
   // ранее в сессию записан факт успешного логина.
-    if (empty($errors) && !empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) {
-    // TODO: загрузить данные пользователя из БД
-    // и заполнить переменную $values,
-    // предварительно санитизовав.
+    if (session_start() && !empty($_SESSION['login'])) {
+
+    $user = user;
+    $pass = password;
+    $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
+      PDO::ATTR_PERSISTENT => true,
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+
 
     try {
-
       $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
-      $stmt->bindParam(':personId', $_SESSION['uid']);
-      $stmt->execute([
-        ':name' => $values['name'],
-        ':phone' => $values['phone'],
-        ':email' => $values['email'],
-        ':year' => $values['year'],
-        ':sex' => $values['sex'],
-        ':biography' => $values['biography']
-        ]);
+      $stmt->bindParam(':personId', $_SESSION['uid'], PDO::PARAM_INT);
+      $stmt->execute();
 
+      $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if ($userData) {
+        // Заполняем массив $values данными пользователя
+        $values['name'] = strip_tags($userData['name']);
+        $values['phone'] = strip_tags($userData['phone']);
+        $values['email'] = strip_tags($userData['email']);
+        $values['year'] = strip_tags($userData['year']);
+        $values['sex'] = strip_tags($userData['sex']);
+        $values['biography'] = strip_tags($userData['biography']);
+
+        $personId = $_SESSION['uid'];
+        
+        $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+        $selectedLanguagesStmt->execute([':personId' => $personId]);
+        $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+      } else {
+        echo 'Данные пользователя не найдены.';
+      }
     } catch(PDOException $e) {
-        print('Error : ' . $e->getMessage());
-        exit();
+      echo 'Ошибка при загрузке данных: ' . $e->getMessage();
     }
-
-    printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
+  } else {
+    echo 'Сессия не начата или пользователь не вошел в систему.';
   }
 
   // Включаем содержимое файла form.php.
@@ -182,14 +204,13 @@ else {
       setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
   }
 
-  if (empty($_POST['language'])) {
-      setcookie('language_error', '1', time() + 24 * 60 * 60);
-      $errors = TRUE;
-    } else {
-        // Преобразование массива в строку для сохранения в cookie
-        $language_value = implode(',', $_POST['language']);
-        setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
-    }
+if (empty($_POST['language'])) {
+    setcookie('language_error', '1', time() + 24 * 60 * 60);
+    $errors = TRUE;
+} else {
+    $languageString = implode(',', $_POST['language']);
+    setcookie('language_value', $languageString, time() + 30 * 24 * 60 * 60);
+}
 
  // if (empty($_POST['language'])) {
  //      setcookie('language_error', '1', time() + 24 * 60 * 60);
