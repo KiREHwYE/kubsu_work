@@ -83,7 +83,7 @@ try {
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
     <select name="userId">
         <?php foreach($usersDB as $option) : ?>
-            <option value="<?php echo $option['personId']; ?>"><?php echo $option['name']; ?></option>
+            <option value="<?php echo $option['personId']; ?>"><?php echo $option['personId']; echo $option['name']; ?></option>
         <?php endforeach; ?>
     </select>
 
@@ -185,6 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 <?php
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
+         isset($_POST['personId']) &&
          isset($_POST['name']) &&
          isset($_POST['email']) &&
          isset($_POST['phone']) &&
