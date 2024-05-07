@@ -207,7 +207,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
               ':biography' => $_POST['biography'],
               ':personId' => intval($_POST['personId'])
             ]);
-            echo $_POST['personId'];
 
             if (is_array($_POST['language'])) {
                 // Обновляем данные в таблице personLanguage.
@@ -245,6 +244,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             exit();
         }
     }
+?>
+
+<form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
+    <textarea required style="margin-top: 20px" name="personId" placeholder="Введите personId пользователя, которого хотите удалить"></textarea>
+    <input required type="submit" value="Удалить этого пользователя">
+</form>
+
+<?php
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId']) {
+
+        try {
+            $stmt = $db->prepare("DELETE FROM personLanguage WHERE personId = :personId");
+            $stmt->execute([':personId' => $_POST['personId']]);
+
+            $stmt = $db->prepare("DELETE FROM personAuthentificationData WHERE personId = :personId");
+            $stmt->execute([':personId' => $_POST['personId']]);
+
+            $stmt = $db->prepare("DELETE FROM person WHERE personId = :personId");
+            $stmt->execute([':personId' => $_POST['personId']]);
+
+        } catch (PDOException $e) {
+            echo "Ошибка выполнения запроса: " . $e->getMessage();
+        }
+    }
 
 
     // Запрос для подсчета количества пользователей по языкам
@@ -252,7 +275,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             FROM language l
             LEFT JOIN personLanguage pl ON l.languageId = pl.languageId
             GROUP BY l.title";
-
     try {
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -264,7 +286,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             echo "<tr><td>{$row['title']}</td><td>{$row['user_count']}</td></tr>";
         }
         echo "</table>";
-        
     } catch (PDOException $e) {
         echo "Ошибка выполнения запроса: " . $e->getMessage();
     }
