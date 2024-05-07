@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($userData) {
-            $values['personId'] = strip_tags($userData['personId']);
+            $values['personId'] = strip_tags($selectOption);
             $values['name'] = strip_tags($userData['name']);
             $values['phone'] = strip_tags($userData['phone']);
             $values['email'] = strip_tags($userData['email']);
