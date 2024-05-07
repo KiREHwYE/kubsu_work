@@ -29,10 +29,10 @@ if (!empty($_SERVER['PHP_AUTH_USER']) &&
         // Проверяем, есть ли пользователь с таким логином и паролем
         $admin_login = $_SERVER['PHP_AUTH_USER'];
         $admin_pass = $_SERVER['PHP_AUTH_PW'];
-        $md5AdminPass = md5($admin_pass);
+        $md5Pass = md5($admin_pass);
 
         $stmt = $db->prepare("SELECT * FROM adminAccount WHERE adminLogin = :adminLogin AND adminPass = :adminPass");
-        $stmt->execute([':adminLogin' => $admin_login, ':adminPass' => $md5AdminPass]);
+        $stmt->execute([':adminLogin' => $login, ':adminPass' => $md5Pass]);
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($authData) {
@@ -57,12 +57,12 @@ if (empty($_SERVER['PHP_AUTH_USER']) ||
 }
 
 echo "Вы успешно авторизовались и видите защищенные паролем данные.";
-?>
+
 // *********
 // Здесь нужно прочитать отправленные ранее пользователями данные и вывести в таблицу.
 // Реализовать просмотр и удаление всех данных.
 // *********
-
+?>
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
 
 <h1>
@@ -70,3 +70,31 @@ echo "Вы успешно авторизовались и видите защи�
 </h1>
 
 </body>
+
+<?php
+
+$usersDB = [];
+
+try {
+    // Проверяем, есть ли пользователь с таким логином и паролем
+    $admin_login = $_SERVER['PHP_AUTH_USER'];
+    $admin_pass = $_SERVER['PHP_AUTH_PW'];
+    $md5Pass = md5($admin_pass);
+
+    $stmt = $db->prepare("SELECT * FROM person");
+    $stmt->execute();
+    $authData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($authData) {
+        $usersDB = $authData;
+    }
+} catch(PDOException $e){
+    print('Error : ' . $e->getMessage());
+    exit();
+}
+?>
+
+<select name="users[]">
+<?php foreach($usersDB as $option) : ?>
+        <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
+</select>
