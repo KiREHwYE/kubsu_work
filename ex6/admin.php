@@ -252,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </form>
 
 <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId']) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId'])) {
 
         try {
             $stmt = $db->prepare("DELETE FROM personLanguage WHERE personId = :personId");
