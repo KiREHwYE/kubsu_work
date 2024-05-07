@@ -102,26 +102,29 @@ try {
     </select>
 </form>
 
+
+    
 <?php
+
+    $values = array();
+    $values['name'] = "";
+    $values['phone'] = "";
+    $values['email'] = "";
+    $values['year'] = "";
+    $values['sex'] = "";
+    $values['language'] = [];
+    $values['biography'] = "";
+    
+    $savedLanguages = $values['language'];
+    
+    function isSelected($optionValue, $savedLanguages) {
+        return in_array($optionValue, $savedLanguages) ? 'selected' : '';
+    }
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $selectOption = $_POST['user'];
-
-        $values = array();
-        $values['name'] = "";
-        $values['phone'] = "";
-        $values['email'] = "";
-        $values['year'] = "";
-        $values['sex'] = "";
-        $values['language'] = [];
-        $values['biography'] = "";
-
-        $savedLanguages = $values['language'];
-
-        function isSelected($optionValue, $savedLanguages) {
-            return in_array($optionValue, $savedLanguages) ? 'selected' : '';
-        }
-
+        
         try {
 
             $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
