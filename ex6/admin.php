@@ -93,11 +93,13 @@ try {
 <h3>
     List of users
 </h3>
-<select name="users">
-    <?php foreach($usersDB as $option) : ?>
-        <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
-    <?php endforeach; ?>
-</select>
+<form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
+    <select name="user">
+        <?php foreach($usersDB as $option) : ?>
+            <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
+        <?php endforeach; ?>
+    </select>
+</form>
 
 <?php
     $selectOption = $_POST['users'];
