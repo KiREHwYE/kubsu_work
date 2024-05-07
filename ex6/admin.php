@@ -125,6 +125,7 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $selectOption = $_POST['user'];
+        echo "Selected user: " . $selectOption;
 
         try {
 
