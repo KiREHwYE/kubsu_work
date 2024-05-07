@@ -107,7 +107,6 @@ try {
 <?php
 
     $values = array();
-    $values['personId'] = 0;
     $values['name'] = "";
     $values['phone'] = "";
     $values['email'] = "";
@@ -125,19 +124,17 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $selectOption = $_POST['user'];
-        echo "Selected user: " . $selectOption;
 
         try {
 
-            $stmt = $db->prepare("SELECT personId, name, phone, email, year, sex, biography FROM person WHERE name = :name");
-            $stmt->bindParam(':name', $selectOption, PDO::PARAM_INT);
+            $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
+            $stmt->bindParam(':name', $selectOption, PDO::PARAM_STR);
             $stmt->execute();
 
             $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($userData) {
 
-                $values['personId'] = strip_tags($userData['personId']);
                 $values['name'] = strip_tags($userData['name']);
                 $values['phone'] = strip_tags($userData['phone']);
                 $values['email'] = strip_tags($userData['email']);
@@ -146,7 +143,7 @@ try {
                 $values['biography'] = strip_tags($userData['biography']);
 
                 $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
-                $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
+                $selectedLanguagesStmt->execute([':personId' => $userData['personId']]);
                 $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
             } else {
