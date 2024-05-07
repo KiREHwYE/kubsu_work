@@ -92,7 +92,9 @@ try {
 
 <select name="users[]">
     <?php foreach($usersDB as $option) : ?>
-            <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
+        <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
+    <?php endforeach; ?>
 </select>
-    
+
 </body>
+?>
