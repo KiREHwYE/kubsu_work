@@ -155,8 +155,6 @@ function isSelected($optionValue, $savedLanguages) {
     } catch(PDOException $e) {
       echo 'Ошибка при загрузке данных: ' . $e->getMessage();
     }
-  } else {
-    echo 'Сессия не начата или пользователь не вошел в систему.';
   }
 
   // Включаем содержимое файла form.php.
