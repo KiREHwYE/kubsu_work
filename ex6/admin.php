@@ -204,6 +204,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
               ':biography' => $_POST['biography'],
               ':personId' => $values['personId']
             ]);
+
+            echo $values['personId'];
     
             if (is_array($_POST['language'])) {
                 // Обновляем данные в таблице personLanguage.
