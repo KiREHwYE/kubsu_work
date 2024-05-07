@@ -100,10 +100,10 @@ try {
             <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
         <?php endforeach; ?>
     </select>
+
+    <input required type="submit" value="Выбрать этого пользователя">
 </form>
 
-
-    
 <?php
 
     $values = array();
@@ -114,9 +114,9 @@ try {
     $values['sex'] = "";
     $values['language'] = [];
     $values['biography'] = "";
-    
+
     $savedLanguages = $values['language'];
-    
+
     function isSelected($optionValue, $savedLanguages) {
         return in_array($optionValue, $savedLanguages) ? 'selected' : '';
     }
@@ -124,7 +124,7 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $selectOption = $_POST['user'];
-        
+
         try {
 
             $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
