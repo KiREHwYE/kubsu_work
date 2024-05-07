@@ -102,7 +102,7 @@ try {
 </form>
 
 <?php
-    $selectOption = $_POST['users'];
+    $selectOption = $_POST['user'];
     
     $values = array();
     $values['name'] = empty($_COOKIE['name_value']) ? '' : strip_tags($_COOKIE['name_value']);
