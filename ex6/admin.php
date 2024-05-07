@@ -62,16 +62,6 @@ echo "Вы успешно авторизовались и видите защи�
 // Здесь нужно прочитать отправленные ранее пользователями данные и вывести в таблицу.
 // Реализовать просмотр и удаление всех данных.
 // *********
-?>
-<body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-
-<h1>
-  Admin Control Center
-</h1>
-
-</body>
-
-<?php
 
 $usersDB = [];
 
@@ -92,9 +82,17 @@ try {
     print('Error : ' . $e->getMessage());
     exit();
 }
+
 ?>
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<h1>
+  Admin Control Center
+</h1>
 
 <select name="users[]">
-<?php foreach($usersDB as $option) : ?>
-        <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
+    <?php foreach($usersDB as $option) : ?>
+            <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
 </select>
+    
+</body>
