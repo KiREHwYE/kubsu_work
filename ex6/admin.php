@@ -107,6 +107,7 @@ try {
 <?php
 
     $values = array();
+    $values['personId'] = 0;
     $values['name'] = "";
     $values['phone'] = "";
     $values['email'] = "";
@@ -127,7 +128,7 @@ try {
 
         try {
 
-            $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
+            $stmt = $db->prepare("SELECT personId, name, phone, email, year, sex, biography FROM person WHERE name = :name");
             $stmt->bindParam(':name', $selectOption, PDO::PARAM_INT);
             $stmt->execute();
 
@@ -135,6 +136,7 @@ try {
 
             if ($userData) {
 
+                $values['personId'] = strip_tags($userData['personId']);
                 $values['name'] = strip_tags($userData['name']);
                 $values['phone'] = strip_tags($userData['phone']);
                 $values['email'] = strip_tags($userData['email']);
@@ -143,7 +145,7 @@ try {
                 $values['biography'] = strip_tags($userData['biography']);
 
                 $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
-                $selectedLanguagesStmt->execute([':personId' => $personId]);
+                $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
                 $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
             } else {
