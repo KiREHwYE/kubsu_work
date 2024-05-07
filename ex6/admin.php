@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
          isset($_POST['biography']) &&
          isset($_POST['language'])) {
         try {
-            echo strval($values['personId']);
+            echo $values['personId'];
 
             $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
             $stmt->execute([
