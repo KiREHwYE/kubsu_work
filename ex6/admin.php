@@ -258,10 +258,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Вывод информации на вашем сайте
+        echo "<table>";
+        echo "<tr><th>Язык</th><th>Количество пользователей</th></tr>";
         foreach ($results as $row) {
-            echo "Язык: <strong>{$row['title']}</strong>, Количество пользователей: <strong>{$row['user_count']}</strong><br>";
+            echo "<tr><td>{$row['title']}</td><td>{$row['user_count']}</td></tr>";
         }
+        echo "</table>";
+        
     } catch (PDOException $e) {
         echo "Ошибка выполнения запроса: " . $e->getMessage();
     }
