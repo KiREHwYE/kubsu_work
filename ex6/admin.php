@@ -93,7 +93,8 @@ try {
 <h3>
     List of users
 </h3>
-<form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
+
+<form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
     <select name="user">
         <?php foreach($usersDB as $option) : ?>
             <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
@@ -102,52 +103,55 @@ try {
 </form>
 
 <?php
-    $selectOption = $_POST['user'];
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $selectOption = $_POST['user'];
     
-    $values = array();
-    $values['name'] = empty($_COOKIE['name_value']) ? '' : strip_tags($_COOKIE['name_value']);
-    $values['phone'] = empty($_COOKIE['phone_value']) ? '' : strip_tags($_COOKIE['phone_value']);
-    $values['email'] = empty($_COOKIE['email_value']) ? '' : strip_tags($_COOKIE['email_value']);
-    $values['year'] = empty($_COOKIE['year_value']) ? '' : strip_tags($_COOKIE['year_value']);
-    $values['sex'] = empty($_COOKIE['sex_value']) ? '' : strip_tags($_COOKIE['sex_value']);
-    $savedLanguage = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
-    $values['language'] = explode(',', $savedLanguage);
-    $values['biography'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
-    $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : strip_tags($_COOKIE['contract_agreement_value']);
+        $values = array();
+        $values['name'] = empty($_COOKIE['name_value']) ? '' : strip_tags($_COOKIE['name_value']);
+        $values['phone'] = empty($_COOKIE['phone_value']) ? '' : strip_tags($_COOKIE['phone_value']);
+        $values['email'] = empty($_COOKIE['email_value']) ? '' : strip_tags($_COOKIE['email_value']);
+        $values['year'] = empty($_COOKIE['year_value']) ? '' : strip_tags($_COOKIE['year_value']);
+        $values['sex'] = empty($_COOKIE['sex_value']) ? '' : strip_tags($_COOKIE['sex_value']);
+        $savedLanguage = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+        $values['language'] = explode(',', $savedLanguage);
+        $values['biography'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
+        $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : strip_tags($_COOKIE['contract_agreement_value']);
     
-    $savedLanguages = $values['language'];
+        $savedLanguages = $values['language'];
     
-    function isSelected($optionValue, $savedLanguages) {
-        return in_array($optionValue, $savedLanguages) ? 'selected' : '';
-    }
-    
-    try {
-    
-        $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
-        $stmt->bindParam(':name', $selectOption, PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($userData) {
-        
-            $values['name'] = strip_tags($userData['name']);
-            $values['phone'] = strip_tags($userData['phone']);
-            $values['email'] = strip_tags($userData['email']);
-            $values['year'] = strip_tags($userData['year']);
-            $values['sex'] = strip_tags($userData['sex']);
-            $values['biography'] = strip_tags($userData['biography']);
-            
-            $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
-            $selectedLanguagesStmt->execute([':personId' => $personId]);
-            $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
-            
-        } else {
-            echo 'Данные пользователя не найдены.';
+        function isSelected($optionValue, $savedLanguages) {
+            return in_array($optionValue, $savedLanguages) ? 'selected' : '';
         }
-        
-    } catch(PDOException $e) {
-        echo 'Ошибка при загрузке данных: ' . $e->getMessage();
+    
+        try {
+    
+            $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
+            $stmt->bindParam(':name', $selectOption, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($userData) {
+    
+                $values['name'] = strip_tags($userData['name']);
+                $values['phone'] = strip_tags($userData['phone']);
+                $values['email'] = strip_tags($userData['email']);
+                $values['year'] = strip_tags($userData['year']);
+                $values['sex'] = strip_tags($userData['sex']);
+                $values['biography'] = strip_tags($userData['biography']);
+    
+                $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+                $selectedLanguagesStmt->execute([':personId' => $personId]);
+                $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    
+            } else {
+                echo 'Данные пользователя не найдены.';
+            }
+    
+        } catch(PDOException $e) {
+            echo 'Ошибка при загрузке данных: ' . $e->getMessage();
+        }
     }
 ?>
 
