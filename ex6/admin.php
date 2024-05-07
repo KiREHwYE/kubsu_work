@@ -83,7 +83,7 @@ try {
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
     <select name="userId">
         <?php foreach($usersDB as $option) : ?>
-            <option value="<?php echo $option['personId']; ?>"><?php echo $option['personId']; echo $option['name']; ?></option>
+            <option value="<?php echo $option['personId']; ?>"><?php echo "ID: " . $option['personId'] . " "; echo "Name: " . $option['name']; ?></option>
         <?php endforeach; ?>
     </select>
 
