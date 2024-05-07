@@ -81,9 +81,9 @@ try {
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-    <select name="user">
+    <select name="userId">
         <?php foreach($usersDB as $option) : ?>
-            <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
+            <option value="<?php echo $option['personId']; ?>"><?php echo $option['name']; ?></option>
         <?php endforeach; ?>
     </select>
 
@@ -111,11 +111,11 @@ function isSelected($optionValue, $savedLanguages) {
 
 // Проверяем, была ли форма отправлена и установлен ли ключ 'user'
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
-    $selectOption = $_POST['user'];
+    $selectOption = $_POST['userId'];
 
     try {
-        $stmt = $db->prepare("SELECT personId, name, phone, email, year, sex, biography FROM person WHERE name = :name");
-        $stmt->bindParam(':name', $selectOption, PDO::PARAM_STR);
+        $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
+        $stmt->bindParam(':personId', $selectOption, PDO::PARAM_STR);
         $stmt->execute();
 
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
             $values['year'] = strip_tags($userData['year']);
             $values['sex'] = strip_tags($userData['sex']);
             $values['biography'] = strip_tags($userData['biography']);
-
+            echo $values['personId'];
             $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
             $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
             $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -185,17 +185,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
 <?php
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
-         isset($_POST['name']) &&
-         isset($_POST['email']) &&
-         isset($_POST['phone']) &&
-         isset($_POST['year']) &&
-         isset($_POST['sex']) &&
-         isset($_POST['biography']) &&
-         isset($_POST['language'])
-    ) {
-        echo strval($values['personId']);
-        
+         isset($_POST['name'] &&
+         isset($_POST['email'] &&
+         isset($_POST['phone'] &&
+         isset($_POST['year'] &&
+         isset($_POST['sex'] &&
+         isset($_POST['biography'] &&
+         isset($_POST['language']) {
         try {
+            echo strval($values['personId']);
+
             $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
             $stmt->execute([
               ':name' => $_POST['name'],
@@ -206,21 +205,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
               ':biography' => $_POST['biography'],
               ':personId' => $values['personId']
             ]);
-    
+
             if (is_array($_POST['language'])) {
                 // Обновляем данные в таблице personLanguage.
                 foreach ($_POST['language'] as $selectedOption) {
                     $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
                     $languageStmt->execute([':title' => $selectedOption]);
                     $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-    
+
                     // Проверяем, существует ли уже запись для данного personId и languageId.
                     $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
                     $checkStmt->execute([
                       ':personId' => $values['personId'],
                       ':languageId' => $language['languageId']
                     ]);
-    
+
                     if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
                         // Если запись существует, обновляем ее.
                         $updateStmt = $db->prepare("UPDATE personLanguage SET languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
