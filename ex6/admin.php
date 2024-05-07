@@ -193,6 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
          isset($_POST['biography']) &&
          isset($_POST['language'])
     ) {
+        echo strval($values['personId']);
+        
         try {
             $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
             $stmt->execute([
@@ -204,8 +206,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
               ':biography' => $_POST['biography'],
               ':personId' => $values['personId']
             ]);
-
-            echo $values['personId'];
     
             if (is_array($_POST['language'])) {
                 // Обновляем данные в таблице personLanguage.
