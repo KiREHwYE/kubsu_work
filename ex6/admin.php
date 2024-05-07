@@ -128,7 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             $values['year'] = strip_tags($userData['year']);
             $values['sex'] = strip_tags($userData['sex']);
             $values['biography'] = strip_tags($userData['biography']);
-            echo $values['personId'];
             $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
             $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
             $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -172,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </select>
 
   <textarea required style="margin-top: 20px" name="biography" placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
+  <textarea required style="margin-top: 20px" name="personId" placeholder="personId"></textarea>
 
   <input required type="submit" value="Change data">
 </form>
@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
          isset($_POST['biography']) &&
          isset($_POST['language'])) {
         try {
-            echo $values['personId'];
+
 
             $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
             $stmt->execute([
@@ -203,8 +203,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
               ':year' => $_POST['year'],
               ':sex' => $_POST['sex'],
               ':biography' => $_POST['biography'],
-              ':personId' => $values['personId']
+              ':personId' => intval($_POST['personId'])
             ]);
+            echo $_POST['personId'];
 
             if (is_array($_POST['language'])) {
                 // Обновляем данные в таблице personLanguage.
@@ -216,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
                     // Проверяем, существует ли уже запись для данного personId и languageId.
                     $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
                     $checkStmt->execute([
-                      ':personId' => $values['personId'],
+                      ':personId' => intval($_POST['personId']),
                       ':languageId' => $language['languageId']
                     ]);
 
@@ -224,14 +225,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
                         // Если запись существует, обновляем ее.
                         $updateStmt = $db->prepare("UPDATE personLanguage SET languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
                         $updateStmt->execute([
-                          ':personId' => $values['personId'],
+                          ':personId' => intval($_POST['personId']),
                           ':languageId' => $language['languageId']
                         ]);
                     } else {
                         // Если записи не существует, вставляем новую.
                         $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
                         $insertStmt->execute([
-                          ':personId' => $values['personId'],
+                          ':personId' => intval($_POST['personId']),
                           ':languageId' => $language['languageId']
                         ]);
                     }
