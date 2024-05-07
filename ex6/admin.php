@@ -127,7 +127,7 @@ try {
 
         try {
 
-            $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE name = :name");
+            $stmt = $db->prepare("SELECT personId, name, phone, email, year, sex, biography FROM person WHERE name = :name");
             $stmt->bindParam(':name', $selectOption, PDO::PARAM_STR);
             $stmt->execute();
 
