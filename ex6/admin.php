@@ -107,6 +107,7 @@ try {
 <?php
 
     $values = array();
+    $values['personId'] = 0;
     $values['name'] = "";
     $values['phone'] = "";
     $values['email'] = "";
@@ -135,6 +136,7 @@ try {
 
             if ($userData) {
 
+                $values['personId'] = strip_tags($userData['personId']);
                 $values['name'] = strip_tags($userData['name']);
                 $values['phone'] = strip_tags($userData['phone']);
                 $values['email'] = strip_tags($userData['email']);
@@ -143,7 +145,7 @@ try {
                 $values['biography'] = strip_tags($userData['biography']);
 
                 $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
-                $selectedLanguagesStmt->execute([':personId' => $userData['personId']]);
+                $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
                 $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
             } else {
@@ -191,3 +193,53 @@ try {
 </form>
 
 </body>
+
+<?php
+
+  try {
+
+    // Теперь обновляем данные в таблице person.
+    $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
+    $stmt->execute([
+      ':name' => $_POST['name'],
+      ':email' => $_POST['email'],
+      ':phone' => $_POST['phone'],
+      ':year' => $_POST['year'],
+      ':sex' => $_POST['sex'],
+      ':biography' => $_POST['biography'],
+      ':personId' => $values['personId']
+    ]);
+
+    // Обновляем данные в таблице personLanguage.
+    foreach ($_POST['language'] as $selectedOption) {
+      $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+      $languageStmt->execute([':title' => $selectedOption]);
+      $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+
+      // Проверяем, существует ли уже запись для данного personId и languageId.
+      $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
+      $checkStmt->execute([
+        ':personId' => $personId,
+        ':languageId' => $language['languageId']
+      ]);
+
+      if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
+        // Если запись существует, обновляем ее.
+        $updateStmt = $db->prepare("UPDATE personLanguage SET personId = :personId, languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
+        $updateStmt->execute([
+          ':personId' => $personId,
+          ':languageId' => $language['languageId']
+        ]);
+      } else {
+        // Если записи не существует, вставляем новую.
+        $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
+        $insertStmt->execute([
+          ':personId' => $personId,
+          ':languageId' => $language['languageId']
+        ]);
+      }
+    }
+  } catch(PDOException $e){
+    print('Error : ' . $e->getMessage());
+    exit();
+  }
