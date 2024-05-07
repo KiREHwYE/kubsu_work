@@ -264,6 +264,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             $stmt = $db->prepare("DELETE FROM person WHERE personId = :personId");
             $stmt->execute([':personId' => $_POST['personId']]);
 
+            header("Location: ".$_SERVER['REQUEST_URI']);
+
         } catch (PDOException $e) {
             echo "Ошибка выполнения запроса: " . $e->getMessage();
         }
