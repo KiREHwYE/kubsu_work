@@ -263,136 +263,140 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </body>
 
 <?php
-
-    $errors = FALSE;
-
-    if (empty($_POST['name']) || !preg_match('/^([А-Яа-я\s]+|[A-Za-z\s]+)$/', $_POST['name'])) {
-        setcookie('name_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('name_value', $_POST['name'], time() + 30 * 24 * 60 * 60);
-    }
-
-    if (empty($_POST['phone']) || strlen($_POST['phone']) > 32 || !preg_match('/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/', $_POST['phone'])) {
-        setcookie('phone_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
-    }
-
-    if (empty($_POST['email']) || !preg_match('/^[\w_\.]+@([\w-]+\.)+[\w-]{2,4}$/', $_POST['email'])) {
-        setcookie('email_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('email_value', $_POST['email'], time() + 30 * 24 * 60 * 60);
-    }
-
-    if (empty($_POST['year'])) {
-        setcookie('year_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('year_value', $_POST['year'], time() + 30 * 24 * 60 * 60);
-    }
-
-    if (empty($_POST['sex'])) {
-        setcookie('sex_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
-    }
-
-    if (empty($_POST['language'])) {
-        setcookie('language_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        $languageString = implode(',', $_POST['language']);
-        setcookie('language_value', $languageString, time() + 30 * 24 * 60 * 60);
-    }
-
-    if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
-        setcookie('biography_error', '1', time() + 24 * 60 * 60);
-        $errors = TRUE;
-    } else {
-        setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
-    }
-
-
-    if ($errors) {
-        // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
-        header('Location: index.php');
-        exit();
-    }
-    else {
-        // Удаляем Cookies с признаками ошибок.
-        setcookie('name_error', '', 100000);
-        setcookie('phone_error', '', 100000);
-        setcookie('email_error', '', 100000);
-        setcookie('year_error', '', 100000);
-        setcookie('sex_error', '', 100000);
-        setcookie('language_error', '', 100000);
-        setcookie('biography_error', '', 100000);
-    }
+    
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $errors = FALSE;
+    
+        if (empty($_POST['name']) || !preg_match('/^([А-Яа-я\s]+|[A-Za-z\s]+)$/', $_POST['name'])) {
+            setcookie('name_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('name_value', $_POST['name'], time() + 30 * 24 * 60 * 60);
+        }
+    
+        if (empty($_POST['phone']) || strlen($_POST['phone']) > 32 || !preg_match('/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/', $_POST['phone'])) {
+            setcookie('phone_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
+        }
+    
+        if (empty($_POST['email']) || !preg_match('/^[\w_\.]+@([\w-]+\.)+[\w-]{2,4}$/', $_POST['email'])) {
+            setcookie('email_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('email_value', $_POST['email'], time() + 30 * 24 * 60 * 60);
+        }
+    
+        if (empty($_POST['year'])) {
+            setcookie('year_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('year_value', $_POST['year'], time() + 30 * 24 * 60 * 60);
+        }
+    
+        if (empty($_POST['sex'])) {
+            setcookie('sex_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
+        }
+    
+        if (empty($_POST['language'])) {
+            setcookie('language_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            $languageString = implode(',', $_POST['language']);
+            setcookie('language_value', $languageString, time() + 30 * 24 * 60 * 60);
+        }
+    
+        if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
+            setcookie('biography_error', '1', time() + 24 * 60 * 60);
+            $errors = TRUE;
+        } else {
+            setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
+        }
 
 
+        if ($errors) {
+            // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
+            header('Location: index.php');
+            exit();
+        }
+        else {
+            // Удаляем Cookies с признаками ошибок.
+            setcookie('name_error', '', 100000);
+            setcookie('phone_error', '', 100000);
+            setcookie('email_error', '', 100000);
+            setcookie('year_error', '', 100000);
+            setcookie('sex_error', '', 100000);
+            setcookie('language_error', '', 100000);
+            setcookie('biography_error', '', 100000);
+        }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
-         isset($_POST['personId']) &&
-         isset($_POST['name']) &&
-         isset($_POST['email']) &&
-         isset($_POST['phone']) &&
-         isset($_POST['year']) &&
-         isset($_POST['sex']) &&
-         isset($_POST['biography']) &&
-         isset($_POST['language'])) {
-        try {
 
 
-            $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
-            $stmt->execute([
-              ':name' => $_POST['name'],
-              ':email' => $_POST['email'],
-              ':phone' => $_POST['phone'],
-              ':year' => $_POST['year'],
-              ':sex' => $_POST['sex'],
-              ':biography' => $_POST['biography'],
-              ':personId' => intval($_POST['personId'])
-            ]);
-            echo $_POST['personId'];
-
-            if (is_array($_POST['language'])) {
-                // Обновляем данные в таблице personLanguage.
-                foreach ($_POST['language'] as $selectedOption) {
-                    $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
-                    $languageStmt->execute([':title' => $selectedOption]);
-                    $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-
-                    // Проверяем, существует ли уже запись для данного personId и languageId.
-                    $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
-                    $checkStmt->execute([
-                      ':personId' => intval($_POST['personId']),
-                      ':languageId' => $language['languageId']
-                    ]);
-
-                    if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
-                        // Если запись существует, обновляем ее.
-                        $updateStmt = $db->prepare("UPDATE personLanguage SET languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
-                        $updateStmt->execute([
+        if (
+             isset($_POST['personId']) &&
+             isset($_POST['name']) &&
+             isset($_POST['email']) &&
+             isset($_POST['phone']) &&
+             isset($_POST['year']) &&
+             isset($_POST['sex']) &&
+             isset($_POST['biography']) &&
+             isset($_POST['language'])
+        ) {
+             
+            try {
+    
+    
+                $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
+                $stmt->execute([
+                  ':name' => $_POST['name'],
+                  ':email' => $_POST['email'],
+                  ':phone' => $_POST['phone'],
+                  ':year' => $_POST['year'],
+                  ':sex' => $_POST['sex'],
+                  ':biography' => $_POST['biography'],
+                  ':personId' => intval($_POST['personId'])
+                ]);
+                echo $_POST['personId'];
+    
+                if (is_array($_POST['language'])) {
+                    // Обновляем данные в таблице personLanguage.
+                    foreach ($_POST['language'] as $selectedOption) {
+                        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+                        $languageStmt->execute([':title' => $selectedOption]);
+                        $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
+    
+                        // Проверяем, существует ли уже запись для данного personId и languageId.
+                        $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
+                        $checkStmt->execute([
                           ':personId' => intval($_POST['personId']),
                           ':languageId' => $language['languageId']
                         ]);
-                    } else {
-                        // Если записи не существует, вставляем новую.
-                        $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
-                        $insertStmt->execute([
-                          ':personId' => intval($_POST['personId']),
-                          ':languageId' => $language['languageId']
-                        ]);
+    
+                        if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
+                            // Если запись существует, обновляем ее.
+                            $updateStmt = $db->prepare("UPDATE personLanguage SET languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
+                            $updateStmt->execute([
+                              ':personId' => intval($_POST['personId']),
+                              ':languageId' => $language['languageId']
+                            ]);
+                        } else {
+                            // Если записи не существует, вставляем новую.
+                            $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
+                            $insertStmt->execute([
+                              ':personId' => intval($_POST['personId']),
+                              ':languageId' => $language['languageId']
+                            ]);
+                        }
                     }
                 }
+            } catch(PDOException $e){
+                print('Error : ' . $e->getMessage());
+                exit();
             }
-        } catch(PDOException $e){
-            print('Error : ' . $e->getMessage());
-            exit();
         }
 
         setcookie('save', '1');
