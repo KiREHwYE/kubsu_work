@@ -29,10 +29,10 @@ if (!empty($_SERVER['PHP_AUTH_USER']) &&
         // Проверяем, есть ли пользователь с таким логином и паролем
         $admin_login = $_SERVER['PHP_AUTH_USER'];
         $admin_pass = $_SERVER['PHP_AUTH_PW'];
-        $md5Pass = md5($admin_pass);
+        $md5AdminPass = md5($admin_pass);
 
         $stmt = $db->prepare("SELECT * FROM adminAccount WHERE adminLogin = :adminLogin AND adminPass = :adminPass");
-        $stmt->execute([':adminLogin' => $login, ':adminPass' => $md5Pass]);
+        $stmt->execute([':adminLogin' => $admin_login, ':adminPass' => $md5AdminPass]);
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($authData) {
