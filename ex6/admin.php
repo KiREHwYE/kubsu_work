@@ -207,7 +207,7 @@ try {
 
           if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
             // Если запись существует, обновляем ее.
-            $updateStmt = $db->prepare("UPDATE personLanguage SET personId = :personId, languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
+            $updateStmt = $db->prepare("UPDATE personLanguage SET languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
             $updateStmt->execute([
               ':personId' => $values['personId'],
               ':languageId' => $language['languageId']
