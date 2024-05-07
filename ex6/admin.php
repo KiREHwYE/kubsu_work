@@ -192,7 +192,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
          isset($_POST['year']) &&
          isset($_POST['sex']) &&
          isset($_POST['biography']) &&
-         isset($_POST['language'])) {
+         isset($_POST['language'])
+    ) {
         try {
 
 
@@ -243,4 +244,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             print('Error : ' . $e->getMessage());
             exit();
         }
-}
+    }
+
+
+    // Запрос для подсчета количества пользователей по языкам
+    $sql = "SELECT l.title, COUNT(pl.personId) AS user_count
+            FROM language l
+            LEFT JOIN personLanguage pl ON l.languageId = pl.languageId
+            GROUP BY l.title";
+
+    try {
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Вывод информации на вашем сайте
+        foreach ($results as $row) {
+            echo "Язык: <strong>{$row['title']}</strong>, Количество пользователей: <strong>{$row['user_count']}</strong><br>";
+        }
+    } catch (PDOException $e) {
+        echo "Ошибка выполнения запроса: " . $e->getMessage();
+    }
+?>
