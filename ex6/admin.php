@@ -110,7 +110,7 @@ function isSelected($optionValue, $savedLanguages) {
 }
 
 // Проверяем, была ли форма отправлена и установлен ли ключ 'user'
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
     $selectOption = $_POST['userId'];
 
     try {
