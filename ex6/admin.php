@@ -87,9 +87,12 @@ try {
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
 
 <h1>
-  Admin Control Center
+    Admin Control Center
 </h1>
 
+<h3>
+    List of users
+</h3>
 <select name="users[]">
     <?php foreach($usersDB as $option) : ?>
         <option value="<?php echo $option['name']; ?>"><?php echo $option['name']; ?></option>
@@ -97,4 +100,3 @@ try {
 </select>
 
 </body>
-?>
