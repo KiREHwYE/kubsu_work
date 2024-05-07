@@ -185,11 +185,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user'])) {
 <?php
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
-         isset($_POST['name'] &&
-         isset($_POST['email'] &&
-         isset($_POST['phone'] &&
-         isset($_POST['year'] &&
-         isset($_POST['sex'] &&
+         isset($_POST['name']) &&
+         isset($_POST['email']) &&
+         isset($_POST['phone']) &&
+         isset($_POST['year']) &&
+         isset($_POST['sex']) &&
          isset($_POST['biography']) &&
          isset($_POST['language'])
     ) {
