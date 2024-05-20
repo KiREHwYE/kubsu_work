@@ -1,8 +1,23 @@
 <?php
 
-$dbUser = getenv('DB_USER');
-$dbPassword = getenv('DB_PASSWORD');
-$dbName = getenv('DB_NAME');
+$env = file_get_contents(__DIR__ . '/.env');
+$lines = explode("\n", $env);
+
+foreach ($lines as $line) {
+    if (strpos($line, '=') !== false) {
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[$name] = trim($value, "\" \r");
+    }
+}
+
+$dbUser = $_ENV['DB_USER'];
+$dbPassword = $_ENV['DB_PASSWORD'];
+$dbName = $_ENV['DB_NAME'];
+
+// Функция для проверки CSRF токена
+function checkCsrfToken($token) {
+    return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
 
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
@@ -63,9 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 </body>
 
-
-
-
 <?php
 }
 // Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
@@ -80,8 +92,8 @@ else {
       }
 
       $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
-        PDO::ATTR_PERSISTENT => true,
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+          PDO::ATTR_PERSISTENT => true,
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
       ]);
 
       try {
