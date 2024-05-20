@@ -1,8 +1,18 @@
 <?php
 
-$dbUser = getenv('DB_USER');
-$dbPassword = getenv('DB_PASSWORD');
-$dbName = getenv('DB_NAME');
+$env = file_get_contents(__DIR__ . '/.env');
+$lines = explode("\n", $env);
+
+foreach ($lines as $line) {
+    if (strpos($line, '=') !== false) {
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[$name] = trim($value, "\" \r");
+    }
+}
+
+$dbUser = $_ENV['DB_USER'];
+$dbPassword = $_ENV['DB_PASSWORD'];
+$dbName = $_ENV['DB_NAME'];
 
 $isAdminAuth = false;
 
@@ -11,7 +21,10 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
-session_start();
+// Функция для проверки CSRF токена
+function checkCsrfToken($token) {
+    return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
 
 $csrfToken = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrfToken;
