@@ -99,7 +99,7 @@ try {
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfToken; ?>">
+    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfTokenAdmin; ?>">
     <select name="userId">
         <?php foreach($usersDB as $option) : ?>
             <option value="<?php echo $option['personId']; ?>"><?php echo "ID: " . $option['personId'] . " "; echo "Name: " . $option['name']; ?></option>
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-  <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfToken; ?>">
+  <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfTokenAdmin; ?>">
   <input required type="text" name="name" value="<?php print $values['name']; ?>" placeholder="Full name">
   <input required type="tel" name="phone" value="<?php print $values['phone']; ?>" placeholder="Phone number">
   <input required type="email" name="email" value="<?php print $values['email']; ?>" placeholder="Email">
@@ -219,9 +219,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
          isset($_POST['biography']) &&
          isset($_POST['language'])
     ) {
+        
+        if (!checkCsrfToken($_POST['csrf_token_admin'])) {
+            die('CSRF token validation failed.');
+        }
+    
         try {
-
-
             $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
             $stmt->execute([
               ':name' => $_POST['name'],
@@ -272,13 +275,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 ?>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfToken; ?>">
+    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfTokenAdmin; ?>">
     <textarea required style="margin-top: 20px" name="personId" placeholder="Введите personId пользователя, которого хотите удалить"></textarea>
     <input required type="submit" value="Удалить этого пользователя">
 </form>
 
 <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId']) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId'])) {
+        
+        if (!checkCsrfToken($_POST['csrf_token_admin'])) {
+            die('CSRF token validation failed.');
+        }
 
         try {
             $stmt = $db->prepare("DELETE FROM personLanguage WHERE personId = :personId");
