@@ -14,7 +14,7 @@ $dbUser = $_ENV['DB_USER'];
 $dbPassword = $_ENV['DB_PASSWORD'];
 $dbName = $_ENV['DB_NAME'];
 
-session_start()
+session_start();
 
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
