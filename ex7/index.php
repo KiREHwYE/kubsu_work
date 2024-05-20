@@ -6,9 +6,9 @@ $dbUser = getenv('DB_USER');
 $dbPassword = getenv('DB_PASSWORD');
 $dbName = getenv('DB_NAME');
 
-echo $dbUser;
-echo $dbPassword;
-echo $dbName;
+print($dbUser);
+print($dbPassword);
+print($dbName);
 
 $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_PERSISTENT => true,
