@@ -53,15 +53,17 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
   }
 }
 
- $csrfTokenLogin = bin2hex(random_bytes(32));
- $_SESSION['csrf_token_login'] = $csrfTokenLogin;
-
 // В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
 // и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<?php
+$csrfTokenLogin = bin2hex(random_bytes(32));
+$_SESSION['csrf_token_login'] = $csrfTokenLogin;
+?>
 
 <h1>
   Login
