@@ -2,9 +2,18 @@
 
 header('Content-Type: text/html; charset=UTF-8');
 
-$dbUser = getenv('DB_USER');
-$dbPassword = getenv('DB_PASSWORD');
-$dbName = getenv('DB_NAME');
+$env = file_get_contents(__DIR__ . '/.env');
+$lines = explode("\n", $env);
+foreach ($lines as $line) {
+    if (strpos($line, '=') !== false) {
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[$name] = trim($value, "\" \r");
+    }
+}
+
+$dbUser = $_ENV['DB_USER'];
+$dbPassword = $_ENV['DB_PASSWORD'];
+$dbName = $_ENV['DB_NAME'];
 
 print($dbUser);
 print($dbPassword);
