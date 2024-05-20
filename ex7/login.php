@@ -14,11 +14,9 @@ $dbUser = $_ENV['DB_USER'];
 $dbPassword = $_ENV['DB_PASSWORD'];
 $dbName = $_ENV['DB_NAME'];
 
-session_start();
-
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
-    return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+    return !empty($_SESSION['csrf_token_login']) && hash_equals($_SESSION['csrf_token_login'], $token);
 }
 
 /**
@@ -55,8 +53,8 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
   }
 }
 
-$csrfToken = bin2hex(random_bytes(32));
-$_SESSION['csrf_token'] = $csrfToken;
+$csrfTokenLogin = bin2hex(random_bytes(32));
+$_SESSION['csrf_token_login'] = $csrfTokenLogin;
 
 // В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
 // и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
@@ -85,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
 else {
 
-      if (!checkCsrfToken($_POST['csrf_token'])) {
+      if (!checkCsrfToken($_POST['csrf_token_login'])) {
           die('CSRF token validation failed.');
       }
 
