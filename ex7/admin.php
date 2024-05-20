@@ -1,5 +1,13 @@
 <?php
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (empty($_SESSION['csrf_token_admin'])) {
+    $_SESSION['csrf_token_admin'] = bin2hex(random_bytes(32));
+}
+
 $env = file_get_contents(__DIR__ . '/.env');
 $lines = explode("\n", $env);
 
@@ -25,14 +33,6 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
 function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token_admin']) && hash_equals($_SESSION['csrf_token_admin'], $token);
 }
-
-$session_started = false;
-if (isset($_COOKIE[session_name()]) && session_start()) {
-  $session_started = true;
-}  
-
-$csrfTokenAdmin = bin2hex(random_bytes(32));
-$_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
 
 if (!empty($_SERVER['PHP_AUTH_USER']) &&
     !empty($_SERVER['PHP_AUTH_PW'])) {
@@ -295,10 +295,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
 <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId'])) {
-
-        if (!$session_started) {
-            session_start();
-        }
 
         if (!checkCsrfToken($_POST['csrf_token_admin'])) {
             die('CSRF token validation failed.');
