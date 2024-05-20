@@ -131,6 +131,10 @@ function isSelected($optionValue, $savedLanguages) {
 // Проверяем, была ли форма отправлена и установлен ли ключ 'user'
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
+    if (!$session_started) {
+        session_start();
+    }
+
     if (!checkCsrfToken($_POST['csrf_token_admin'])) {
         die('CSRF token validation failed.');
     }
@@ -219,11 +223,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
          isset($_POST['biography']) &&
          isset($_POST['language'])
     ) {
+
+        if (!$session_started) {
+            session_start();
+        }
         
         if (!checkCsrfToken($_POST['csrf_token_admin'])) {
             die('CSRF token validation failed.');
         }
-    
+
         try {
             $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
             $stmt->execute([
@@ -282,7 +290,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
 <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId'])) {
-        
+
+        if (!$session_started) {
+            session_start();
+        }
+
         if (!checkCsrfToken($_POST['csrf_token_admin'])) {
             die('CSRF token validation failed.');
         }
@@ -323,7 +335,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
         echo "Ошибка выполнения запроса: " . $e->getMessage();
     }
 ?>
-
-
-
-
