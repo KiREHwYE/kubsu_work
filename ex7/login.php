@@ -85,12 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
 else {
 
-      if (!checkCsrfToken($_POST['csrf_token_login'])) {
-          die('CSRF token validation failed.');
-      }
-
       if (!$session_started) {
         session_start();
+      }
+
+      if (!checkCsrfToken($_POST['csrf_token_login'])) {
+          die('CSRF token validation failed.');
       }
 
       $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
