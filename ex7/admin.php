@@ -21,12 +21,15 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
-session_start();
-
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token_admin']) && hash_equals($_SESSION['csrf_token_admin'], $token);
 }
+
+$session_started = false;
+if (isset($_COOKIE[session_name()]) && session_start()) {
+  $session_started = true;
+}  
 
 $csrfTokenAdmin = bin2hex(random_bytes(32));
 $_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
@@ -229,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
         if (!$session_started) {
             session_start();
         }
-        
+
         if (!checkCsrfToken($_POST['csrf_token_admin'])) {
             die('CSRF token validation failed.');
         }
