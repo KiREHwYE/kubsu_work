@@ -21,15 +21,13 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
-session_start();
-
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
-    return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+    return !empty($_SESSION['csrf_token_admin']) && hash_equals($_SESSION['csrf_token_admin'], $token);
 }
 
-$csrfToken = bin2hex(random_bytes(32));
-$_SESSION['csrf_token'] = $csrfToken;
+$csrfTokenAdmin = bin2hex(random_bytes(32));
+$_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
 
 if (!empty($_SERVER['PHP_AUTH_USER']) &&
     !empty($_SERVER['PHP_AUTH_PW'])) {
@@ -101,7 +99,7 @@ try {
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-    <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfToken; ?>">
     <select name="userId">
         <?php foreach($usersDB as $option) : ?>
             <option value="<?php echo $option['personId']; ?>"><?php echo "ID: " . $option['personId'] . " "; echo "Name: " . $option['name']; ?></option>
@@ -133,7 +131,7 @@ function isSelected($optionValue, $savedLanguages) {
 // Проверяем, была ли форма отправлена и установлен ли ключ 'user'
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
-    if (!checkCsrfToken($_POST['csrf_token'])) {
+    if (!checkCsrfToken($_POST['csrf_token_admin'])) {
         die('CSRF token validation failed.');
     }
 
@@ -172,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-  <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+  <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfToken; ?>">
   <input required type="text" name="name" value="<?php print $values['name']; ?>" placeholder="Full name">
   <input required type="tel" name="phone" value="<?php print $values['phone']; ?>" placeholder="Phone number">
   <input required type="email" name="email" value="<?php print $values['email']; ?>" placeholder="Email">
@@ -274,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 ?>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-    <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfToken; ?>">
     <textarea required style="margin-top: 20px" name="personId" placeholder="Введите personId пользователя, которого хотите удалить"></textarea>
     <input required type="submit" value="Удалить этого пользователя">
 </form>
@@ -318,7 +316,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
         echo "Ошибка выполнения запроса: " . $e->getMessage();
     }
 ?>
-
 
 
 
