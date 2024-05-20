@@ -6,18 +6,12 @@ define("dbname", "u67397");
 
 $isAdminAuth = false;
 
-$env = file_get_contents(__DIR__ . '/.env');
-$lines = explode("\n", $env);
-foreach ($lines as $line) {
-    if (strpos($line, '=') !== false) {
-        list($name, $value) = explode('=', $line, 2);
-        $_ENV[$name] = trim($value, "\" \r");
-    }
-}
-
-$dbUser = $_ENV['DB_USER'];
-$dbPassword = $_ENV['DB_PASSWORD'];
-$dbName = $_ENV['DB_NAME'];
+$user = user;
+$pass = password;
+$db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
+  PDO::ATTR_PERSISTENT => true,
+  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+]);
 
 if (!empty($_SERVER['PHP_AUTH_USER']) &&
     !empty($_SERVER['PHP_AUTH_PW'])) {
