@@ -14,11 +14,6 @@ $dbUser = $_ENV['DB_USER'];
 $dbPassword = $_ENV['DB_PASSWORD'];
 $dbName = $_ENV['DB_NAME'];
 
-// Функция для проверки CSRF токена
-function checkCsrfToken($token) {
-    return !empty($_SESSION['csrf_token_login']) && hash_equals($_SESSION['csrf_token_login'], $token);
-}
-
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
  * При отправке формы проверяет логин/пароль и создает сессию,
@@ -53,6 +48,11 @@ if (isset($_COOKIE[session_name()]) && session_start()) {
   }
 }
 
+// Функция для проверки CSRF токена
+function checkCsrfToken($token) {
+    return !empty($_SESSION['csrf_token_login']) && hash_equals($_SESSION['csrf_token_login'], $token);
+}
+
 // В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
 // и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
 
 <?php
-$csrfTokenLogin = bin2hex(random_bytes(32));
-$_SESSION['csrf_token_login'] = $csrfTokenLogin;
+    $csrfTokenLogin = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token_login'] = $csrfTokenLogin;
 ?>
 
 <h1>
@@ -70,7 +70,7 @@ $_SESSION['csrf_token_login'] = $csrfTokenLogin;
 </h1>
 
 <form action="" method="post">
-  <input type="hidden" name="csrf_token_login" value="<?php echo $csrfToken; ?>">
+  <input type="hidden" name="csrf_token_login" value="<?php echo $csrfTokenLogin; ?>">
   <input name="login" />
   <input name="pass" />
   <input type="submit" value="Войти" />
