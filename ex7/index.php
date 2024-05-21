@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 header('Content-Type: text/html; charset=UTF-8');
 
 $env = file_get_contents(__DIR__ . '/.env');
