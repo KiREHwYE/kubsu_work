@@ -1,4 +1,5 @@
 <?php
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -24,24 +25,14 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
-// Проверяем, залогинен ли пользователь
-if (empty($_SESSION['login'])) {
-    header('Location: ./login.php');
-    exit();
-}
-
+// Функция для проверки CSRF токена
 function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
+// Функция для очистки пользовательского ввода
 function sanitizeInput($data) {
     return htmlspecialchars(trim($data));
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
-    session_destroy();
-    header('Location: ./login.php');
-    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -106,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         return in_array($optionValue, $savedLanguages) ? 'selected' : '';
   }
 
-  if (session_status() != PHP_SESSION_NONE && !empty($_SESSION['login'])) {
+  if (session_start() && !empty($_SESSION['login'])) {
 
     try {
       $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
