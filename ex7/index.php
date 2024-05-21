@@ -35,7 +35,7 @@ function sanitizeInput($data) {
     return htmlspecialchars(trim($data));
 }
 
-if (isset($_POST['logout'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
     session_destroy();
     header('Location: ./login.php');
     exit();
