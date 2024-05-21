@@ -1,5 +1,9 @@
 <?php
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $env = file_get_contents(__DIR__ . '/.env');
 $lines = explode("\n", $env);
 
