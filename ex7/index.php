@@ -4,6 +4,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 $env = file_get_contents(__DIR__ . '/.env');
 $lines = explode("\n", $env);
+
 foreach ($lines as $line) {
     if (strpos($line, '=') !== false) {
         list($name, $value) = explode('=', $line, 2);
@@ -120,7 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo 'Данные пользователя не найдены.';
       }
     } catch(PDOException $e) {
-      echo 'Ошибка при загрузке данных: ' . $e->getMessage();
+      error_log('Ошибка при загрузке данных: ' . $e->getMessage());
+      echo 'Произошла ошибка при загрузке данных.';
     }
   } else {
     echo 'Пользователь не вошел в систему.';
@@ -233,7 +235,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
       }
     } catch(PDOException $e){
-      print('Error : ' . $e->getMessage());
+      error_log('Error : ' . $e->getMessage());
       exit();
     }
   }
@@ -296,9 +298,8 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       ]);
     }
     catch(PDOException $e){
-      error_log('Error updating data: ' . $e->getMessage());
-      //нужно убрать print!!!!!!!
-      print('Error : ' . $e->getMessage());
+      error_log('Ошибка обновления данных.' . $e->getMessage());
+      echo 'Ошибка обновления данных.';
       exit();
     }
   }
