@@ -15,10 +15,6 @@ $dbUser = $_ENV['DB_USER'];
 $dbPassword = $_ENV['DB_PASSWORD'];
 $dbName = $_ENV['DB_NAME'];
 
-print($dbUser);
-print($dbPassword);
-print($dbName);
-
 $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_PERSISTENT => true,
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
