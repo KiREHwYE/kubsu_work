@@ -1,5 +1,4 @@
 <?php
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -25,12 +24,16 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
-// Функция для проверки CSRF токена
+// Проверяем, залогинен ли пользователь
+if (empty($_SESSION['login'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
 function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
-// Функция для очистки пользовательского ввода
 function sanitizeInput($data) {
     return htmlspecialchars(trim($data));
 }
