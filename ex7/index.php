@@ -24,8 +24,6 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
-session_start();
-
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
