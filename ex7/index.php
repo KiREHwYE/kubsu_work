@@ -35,18 +35,10 @@ function sanitizeInput($data) {
     return htmlspecialchars(trim($data));
 }
 
-if (isset($_COOKIE[session_name()]) && session_status() != PHP_SESSION_NONE) {
-    if (!empty($_SESSION['login'])) {
-        if (isset($_POST['logout'])) {
-            session_destroy();
-            header('Location: ./login.php');
-            exit();
-        }
-
-        // Делаем перенаправление на форму.
-        header('Location: ./');
-        exit();
-    }
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: ./login.php');
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
