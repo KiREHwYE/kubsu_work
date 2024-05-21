@@ -1,13 +1,5 @@
 <?php
 
-$session_started = false;
-
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-} else {
-    $session_started = true;
-}
-
 $env = file_get_contents(__DIR__ . '/.env');
 $lines = explode("\n", $env);
 
@@ -94,13 +86,14 @@ try {
     exit();
 }
 
+if (!isset($_SESSION['csrf_token_admin'])) {
+    $_SESSION['csrf_token_admin'] = bin2hex(random_bytes(32));
+}
+
+$csrfTokenAdmin = $_SESSION['csrf_token_admin'];
+
 ?>
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-
-<?php
-    $csrfTokenAdmin = bin2hex(random_bytes(32));
-    $_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
-?>
 
 <h1>
     Admin Control Center
@@ -232,10 +225,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
          isset($_POST['biography']) &&
          isset($_POST['language'])
     ) {
-
-        if (!$session_started) {
-            session_start();
-        }
 
         if (!checkCsrfToken($_POST['csrf_token_admin'])) {
             die('CSRF token validation failed.');
