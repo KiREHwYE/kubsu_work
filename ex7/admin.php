@@ -29,6 +29,9 @@ $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
+$csrfTokenAdmin = bin2hex(random_bytes(32));
+$_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
+
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token_admin']) && hash_equals($_SESSION['csrf_token_admin'], $token);
@@ -88,6 +91,8 @@ try {
         $usersDB = $authData;
     }
 } catch(PDOException $e){
+    error_log('Error : ' . $e->getMessage());
+    //убрать!!!!!
     print('Error : ' . $e->getMessage());
     exit();
 }
@@ -136,6 +141,10 @@ function isSelected($optionValue, $savedLanguages) {
 // Проверяем, была ли форма отправлена и установлен ли ключ 'user'
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
+    if (!$session_started) {
+        session_start();
+    }
+
     if (!checkCsrfToken($_POST['csrf_token_admin'])) {
         die('CSRF token validation failed.');
     }
@@ -164,7 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             echo 'Данные пользователя не найдены.';
         }
     } catch(PDOException $e) {
-        echo 'Ошибка при загрузке данных: ' . $e->getMessage();
+        error_log('Error : ' . $e->getMessage());
+        echo 'Ошибка при загрузке данных.'
     }
 }
 ?>
