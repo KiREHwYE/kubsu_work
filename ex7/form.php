@@ -1,5 +1,8 @@
 <?php
-session_start(); // Убедитесь, что сессия стартует в начале файла
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
