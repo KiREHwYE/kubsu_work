@@ -72,10 +72,5 @@ if (!empty($messages)) {
     <input required type="submit" value="Submit">
 </form>
 
-<form method="post">
-    <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
-    <input type="submit" name="logout" value="Выйти" />
-</form>
-
 </body>
 </html>
