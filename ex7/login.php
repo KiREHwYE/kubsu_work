@@ -1,5 +1,4 @@
 <?php
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -31,6 +30,12 @@ function checkCsrfToken($token) {
     return !empty($_SESSION['csrf_token_login']) && hash_equals($_SESSION['csrf_token_login'], $token);
 }
 
+// Если пользователь уже залогинен, перенаправляем на index.php
+if (!empty($_SESSION['login'])) {
+    header('Location: ./index.php');
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!checkCsrfToken($_POST['csrf_token_login'])) {
         die('CSRF token validation failed.');
@@ -53,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($authData) {
             $_SESSION['login'] = $login;
             $_SESSION['uid'] = $authData['personId'];
-            header('Location: ./');
+            header('Location: ./index.php');
             exit();
         } else {
             echo "Неверный логин или пароль.";
@@ -63,11 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         error_log('Error : ' . $e->getMessage());
         exit();
     }
-}
-
-if (!empty($_SESSION['login'])) {
-    header('Location: ./');
-    exit();
 }
 ?>
 
