@@ -14,14 +14,6 @@ $dbUser = $_ENV['DB_USER'];
 $dbPassword = $_ENV['DB_PASSWORD'];
 $dbName = $_ENV['DB_NAME'];
 
-/**
- * Файл login.php для не авторизованного пользователя выводит форму логина.
- * При отправке формы проверяет логин/пароль и создает сессию,
- * записывает в нее логин и id пользователя.
- * После авторизации пользователь перенаправляется на главную страницу
- * для изменения ранее введенных данных.
- **/
-
 // Отправляем браузеру правильную кодировку,
 // файл login.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
@@ -30,22 +22,22 @@ header('Content-Type: text/html; charset=UTF-8');
 // Будем сохранять туда логин после успешной авторизации.
 $session_started = false;
 if (isset($_COOKIE[session_name()]) && session_start()) {
-  $session_started = true;
-  if (!empty($_SESSION['login'])) {
-    // Если есть логин в сессии, то пользователь уже авторизован.
-    // TODO: Сделать выход (окончание сессии вызовом session_destroy()
-    //при нажатии на кнопку Выход).
-    if (isset($_POST['logout'])) {
-        session_destroy();
-        echo "Вы вышли из сессии.";
+    $session_started = true;
+    if (!empty($_SESSION['login'])) {
+        // Если есть логин в сессии, то пользователь уже авторизован.
+        // TODO: Сделать выход (окончание сессии вызовом session_destroy()
+        // при нажатии на кнопку Выход).
+        if (isset($_POST['logout'])) {
+            session_destroy();
+            echo "Вы вышли из сессии.";
+            header('Location: ./');
+            exit();
+        }
+
+        // Делаем перенаправление на форму.
         header('Location: ./');
         exit();
     }
-
-    // Делаем перенаправление на форму.
-    header('Location: ./');
-    exit();
-  }
 }
 
 // Функция для проверки CSRF токена
@@ -65,40 +57,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $_SESSION['csrf_token_login'] = $csrfTokenLogin;
 ?>
 
-<h1>
-  Login
-</h1>
+<h1>Login</h1>
 
 <form action="" method="post">
-  <input type="hidden" name="csrf_token_login" value="<?php echo $csrfTokenLogin; ?>">
-  <input name="login" />
-  <input name="pass" />
-  <input type="submit" value="Войти" />
+    <input type="hidden" name="csrf_token_login" value="<?php echo $csrfTokenLogin; ?>">
+    <input name="login" value="<?php echo htmlspecialchars($login ?? ''); ?>" />
+    <input name="pass" value="<?php echo htmlspecialchars($password ?? ''); ?>" />
+    <input type="submit" value="Войти" />
 </form>
 
-<input type="submit" name = "logout" value="Выйти" />
+<form method="post">
+    <input type="submit" name="logout" value="Выйти" />
+</form>
 
 </body>
 
 <?php
-}
-// Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
-else {
-
-      if (!$session_started) {
+} else {
+    if (!$session_started) {
         session_start();
-      }
+    }
 
-      if (!checkCsrfToken($_POST['csrf_token_login'])) {
-          die('CSRF token validation failed.');
-      }
+    if (!checkCsrfToken($_POST['csrf_token_login'])) {
+        die('CSRF token validation failed.');
+    }
 
-      $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
-          PDO::ATTR_PERSISTENT => true,
-          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-      ]);
+    $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
+        PDO::ATTR_PERSISTENT => true,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 
-      try {
+    try {
         // Проверяем, есть ли пользователь с таким логином и паролем
         $login = $_POST['login'];
         $password = $_POST['pass'];
@@ -109,26 +98,24 @@ else {
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($authData) {
-          // Пользователь существует, сохраняем данные в сессию
-          $_SESSION['login'] = $login;
-          $_SESSION['uid'] = $authData['personId'];
+            // Пользователь существует, сохраняем данные в сессию
+            $_SESSION['login'] = $login;
+            $_SESSION['uid'] = $authData['personId'];
 
-          // Делаем перенаправление на главную страницу
-          header('Location: ./');
-          exit();
+            // Делаем перенаправление на главную страницу
+            header('Location: ./');
+            exit();
         } else {
-          // Пользователь не найден, выдаем ошибку
-          echo "Неверный логин или пароль.";
-          echo $md5Pass;
-          exit();
+            // Пользователь не найден, выдаем ошибку
+            echo "Неверный логин или пароль.";
+            exit();
         }
-      } catch(PDOException $e){
-        print('Error : ' . $e->getMessage());
+    } catch(PDOException $e){
+        error_log('Error : ' . $e->getMessage()); // Логируем ошибки, а не выводим их
         exit();
-      }
+    }
 
-
-
-  // Делаем перенаправление.
-  header('Location: ./');
+    // Делаем перенаправление.
+    header('Location: ./');
 }
+?>
