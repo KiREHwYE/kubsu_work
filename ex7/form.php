@@ -11,7 +11,6 @@
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
 
 <?php
-session_start();
 $csrfToken = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrfToken;
 if (!empty($messages)) {
