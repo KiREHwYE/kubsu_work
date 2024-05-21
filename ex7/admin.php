@@ -1,11 +1,11 @@
 <?php
 
+$session_started = false;
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
-}
-
-if (empty($_SESSION['csrf_token_admin'])) {
-    $_SESSION['csrf_token_admin'] = bin2hex(random_bytes(32));
+} else {
+    $session_started = true;
 }
 
 $env = file_get_contents(__DIR__ . '/.env');
@@ -18,19 +18,12 @@ foreach ($lines as $line) {
     }
 }
 
-$dbUser = $_ENV['DB_USER'];
-$dbPassword = $_ENV['DB_PASSWORD'];
-$dbName = $_ENV['DB_NAME'];
-
 $isAdminAuth = false;
 
 $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_PERSISTENT => true,
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
-
-$csrfTokenAdmin = bin2hex(random_bytes(32));
-$_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
 
 // Функция для проверки CSRF токена
 function checkCsrfToken($token) {
@@ -99,6 +92,11 @@ try {
 
 ?>
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<?php
+    $csrfTokenAdmin = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token_admin'] = $csrfTokenAdmin;
+?>
 
 <h1>
     Admin Control Center
