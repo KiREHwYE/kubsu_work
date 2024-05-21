@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
         }
     } catch(PDOException $e) {
         error_log('Error : ' . $e->getMessage());
-        echo 'Ошибка при загрузке данных.'
+        echo 'Ошибка при загрузке данных.';
     }
 }
 ?>
