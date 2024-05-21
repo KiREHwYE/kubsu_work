@@ -10,7 +10,6 @@ if (!isset($_SESSION['csrf_token'])) {
 
 $csrfToken = $_SESSION['csrf_token'];
 
-
 if (!empty($messages)) {
     print('<div id="messages">');
 
@@ -20,6 +19,20 @@ if (!empty($messages)) {
     }
 
     print('</div>');
+}
+
+if (isset($_COOKIE[session_name()]) && session_status() != PHP_SESSION_NONE) {
+    if (!empty($_SESSION['login'])) {
+        if (isset($_POST['logout'])) {
+            session_destroy();
+            header('Location: ./login.php');
+            exit();
+        }
+
+        // Делаем перенаправление на форму.
+        header('Location: ./');
+        exit();
+    }
 }
 ?>
 
@@ -71,5 +84,11 @@ if (!empty($messages)) {
 
     <input required type="submit" value="Submit">
 </form>
+
+<form method="post">
+    <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+    <input type="submit" name="logout" value="Выйти" />
+</form>
+
 </body>
 </html>
