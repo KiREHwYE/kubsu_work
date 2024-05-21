@@ -10,12 +10,6 @@ if (!isset($_SESSION['csrf_token'])) {
 
 $csrfToken = $_SESSION['csrf_token'];
 
-if (isset($_POST['logout'])) {
-    session_destroy();
-    header('Location: ./login.php');
-    exit();
-}
-
 if (!empty($_SESSION['login'])) {
     header('Location: ./');
     exit();
