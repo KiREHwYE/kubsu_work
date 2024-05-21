@@ -143,10 +143,6 @@ function isSelected($optionValue, $savedLanguages) {
 // Проверяем, была ли форма отправлена и установлен ли ключ 'user'
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
-    if (!$session_started) {
-        session_start();
-    }
-
     if (!checkCsrfToken($_POST['csrf_token_admin'])) {
         die('CSRF token validation failed.');
     }
